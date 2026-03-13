@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocuMind — Your Firm's Brain. Always On.</title>
+    <title>Leanos — Your Firm's Brain. Always On.</title>
     <meta name="description" content="Private AI assistant trained on your internal documents. Your team asks questions in plain English. It answers instantly, with sources.">
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -15,7 +16,8 @@
             box-sizing: border-box;
         }
 
-        :root {
+        /* Dark Theme (default) */
+        :root, [data-theme="dark"] {
             --bg-primary: #0a0a0a;
             --bg-surface: #111111;
             --bg-surface-2: #1a1a1a;
@@ -25,6 +27,23 @@
             --accent-dim: rgba(200, 255, 0, 0.1);
             --border: rgba(255, 255, 255, 0.07);
             --border-hover: rgba(255, 255, 255, 0.15);
+            --shadow: rgba(0, 0, 0, 0.5);
+            --navbar-bg: rgba(10, 10, 10, 0.8);
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: #f8f8f8;
+            --bg-surface: #ffffff;
+            --bg-surface-2: #f0f0f0;
+            --text-primary: #0a0a0a;
+            --text-secondary: #666666;
+            --accent: #00aa55;
+            --accent-dim: rgba(0, 170, 85, 0.1);
+            --border: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.15);
+            --shadow: rgba(0, 0, 0, 0.1);
+            --navbar-bg: rgba(248, 248, 248, 0.8);
         }
 
         html {
@@ -38,6 +57,7 @@
             font-weight: 400;
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Noise texture overlay */
@@ -105,11 +125,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(200, 255, 0, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(200, 255, 0, 0.5); }
-        }
-
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -133,7 +148,7 @@
         }
 
         .navbar.scrolled {
-            background: rgba(10, 10, 10, 0.8);
+            background: var(--navbar-bg);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
         }
@@ -153,10 +168,17 @@
             font-size: 1.25rem;
         }
 
-        .logo svg {
-            width: 32px;
-            height: 32px;
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
+
+        /* Show correct logo based on theme */
+        [data-theme="dark"] .logo-light { display: none; }
+        [data-theme="dark"] .logo-dark { display: block; }
+        [data-theme="light"] .logo-light { display: block; }
+        [data-theme="light"] .logo-dark { display: none; }
 
         .nav-links {
             display: flex;
@@ -172,6 +194,61 @@
 
         .nav-links a:hover {
             color: var(--text-primary);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Theme Toggle Switch */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--border-hover);
+        }
+
+        .theme-toggle-track {
+            width: 44px;
+            height: 24px;
+            background: var(--bg-surface-2);
+            border-radius: 12px;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        [data-theme="light"] .theme-toggle-thumb {
+            transform: translateX(20px);
+        }
+
+        .theme-icon {
+            font-size: 14px;
         }
 
         .btn {
@@ -196,6 +273,10 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(200, 255, 0, 0.3);
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            box-shadow: 0 10px 30px rgba(0, 170, 85, 0.3);
         }
 
         .btn-ghost {
@@ -244,6 +325,10 @@
             pointer-events: none;
         }
 
+        [data-theme="light"] .hero::before {
+            background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.06) 0%, transparent 60%);
+        }
+
         .hero .container {
             position: relative;
             z-index: 1;
@@ -279,7 +364,7 @@
         .hero h1 {
             font-size: clamp(3rem, 8vw, 5.5rem);
             margin-bottom: 24px;
-            background: linear-gradient(180deg, var(--text-primary) 0%, rgba(245, 240, 235, 0.7) 100%);
+            background: linear-gradient(180deg, var(--text-primary) 0%, var(--text-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -309,7 +394,8 @@
             border: 1px solid var(--border);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 40px 80px var(--shadow);
+            transition: all 0.3s ease;
         }
 
         .chat-header {
@@ -372,8 +458,12 @@
         }
 
         .chat-message.ai .chat-bubble {
-            background: rgba(200, 255, 0, 0.08);
+            background: var(--accent-dim);
             border: 1px solid rgba(200, 255, 0, 0.2);
+        }
+
+        [data-theme="light"] .chat-message.ai .chat-bubble {
+            border: 1px solid rgba(0, 170, 85, 0.2);
         }
 
         .chat-source {
@@ -392,10 +482,14 @@
             display: flex;
             gap: 4px;
             padding: 14px 18px;
-            background: rgba(200, 255, 0, 0.08);
+            background: var(--accent-dim);
             border: 1px solid rgba(200, 255, 0, 0.2);
             border-radius: 12px;
             width: fit-content;
+        }
+
+        [data-theme="light"] .typing-indicator {
+            border: 1px solid rgba(0, 170, 85, 0.2);
         }
 
         .typing-dot {
@@ -1010,6 +1104,10 @@
             pointer-events: none;
         }
 
+        [data-theme="light"] .final-cta::before {
+            background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.08) 0%, transparent 50%);
+        }
+
         .final-cta .container {
             position: relative;
             z-index: 1;
@@ -1042,6 +1140,10 @@
             color: var(--accent);
         }
 
+        [data-theme="light"] .guarantee-badge {
+            border: 1px solid rgba(0, 170, 85, 0.3);
+        }
+
         /* ===== FOOTER ===== */
         .footer {
             padding: 60px 0;
@@ -1062,9 +1164,10 @@
             gap: 12px;
         }
 
-        .footer-logo svg {
+        .footer-logo img {
             width: 28px;
             height: 28px;
+            object-fit: contain;
         }
 
         .footer-logo span {
@@ -1123,7 +1226,10 @@
         }
 
         @media (max-width: 768px) {
-            .nav-links,
+            .nav-links {
+                display: none;
+            }
+
             .nav-cta {
                 display: none;
             }
@@ -1179,6 +1285,10 @@
                 border-left: none;
                 border-right: none;
             }
+
+            .theme-toggle {
+                padding: 6px 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1204,12 +1314,9 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="#" class="logo">
-                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 2L8 14H14V30L24 18H18L22 8L16 2Z" fill="currentColor"/>
-                    <path d="M6 12L2 20H8L6 12Z" fill="currentColor" opacity="0.6"/>
-                    <path d="M26 12L30 20H24L26 12Z" fill="currentColor" opacity="0.6"/>
-                </svg>
-                DocuMind
+                <img src="logo-white.png" alt="Leanos" class="logo-img logo-dark">
+                <img src="logo-black.png" alt="Leanos" class="logo-img logo-light">
+                Leanos
             </a>
             <ul class="nav-links">
                 <li><a href="#how-it-works">How it works</a></li>
@@ -1217,7 +1324,16 @@
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#faq">FAQ</a></li>
             </ul>
-            <a href="#book-demo" class="btn btn-primary nav-cta">Book a Free Demo →</a>
+            <div class="nav-right">
+                <div class="theme-toggle" id="theme-toggle" role="button" aria-label="Toggle theme">
+                    <div class="theme-toggle-track">
+                        <div class="theme-toggle-thumb">
+                            <span class="theme-icon" id="theme-icon">🌙</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="#book-demo" class="btn btn-primary nav-cta">Book a Free Demo →</a>
+            </div>
             <button class="mobile-menu-btn" aria-label="Menu">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -1247,7 +1363,7 @@
                         <span class="chat-dot red"></span>
                         <span class="chat-dot yellow"></span>
                         <span class="chat-dot green"></span>
-                        <span class="chat-title">DocuMind Assistant</span>
+                        <span class="chat-title">Leanos Assistant</span>
                     </div>
                     <div class="chat-messages">
                         <div class="chat-message user">
@@ -1373,7 +1489,7 @@
                             <span class="chat-dot red"></span>
                             <span class="chat-dot yellow"></span>
                             <span class="chat-dot green"></span>
-                            <span class="chat-title">DocuMind Assistant</span>
+                            <span class="chat-title">Leanos Assistant</span>
                         </div>
                         <div class="chat-messages">
                             <div class="chat-message user">
@@ -1703,12 +1819,9 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
-                        <path d="M16 2L8 14H14V30L24 18H18L22 8L16 2Z" fill="currentColor"/>
-                        <path d="M6 12L2 20H8L6 12Z" fill="currentColor" opacity="0.6"/>
-                        <path d="M26 12L30 20H24L26 12Z" fill="currentColor" opacity="0.6"/>
-                    </svg>
-                    <span>DocuMind</span>
+                    <img src="logo-white.png" alt="Leanos" class="logo-dark">
+                    <img src="logo-black.png" alt="Leanos" class="logo-light">
+                    <span>Leanos</span>
                 </div>
                 <ul class="footer-links">
                     <li><a href="#how-it-works">How it works</a></li>
@@ -1716,13 +1829,36 @@
                     <li><a href="#faq">FAQ</a></li>
                     <li><a href="#book-demo">Book a Demo</a></li>
                 </ul>
-                <p class="footer-copy">© 2025 DocuMind AI — All rights reserved</p>
+                <p class="footer-copy">© 2025 Leanos AI — All rights reserved</p>
             </div>
             <p class="footer-tagline">Private AI. Your documents. Your control.</p>
         </div>
     </footer>
 
     <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+
         // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
