@@ -166,7 +166,7 @@
         }
 
         .logo-img {
-            height: 48px;
+            height: 32px;
             width: auto;
             object-fit: contain;
         }
@@ -258,7 +258,7 @@
 
         .btn-primary {
             background: var(--accent);
-            color: #ffffff;
+            color: #0a0a0a;
         }
 
         .btn-primary:hover {
@@ -426,6 +426,12 @@
         }
 
         /* Chat Mockup */
+        .chat-mockup-wrapper {
+            perspective: 1500px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
         .chat-mockup {
             max-width: 700px;
             margin: 0 auto;
@@ -433,8 +439,24 @@
             border: 1px solid var(--border);
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 40px 80px var(--shadow);
-            transition: all 0.3s ease;
+            box-shadow:
+                0 50px 100px -20px var(--shadow),
+                0 30px 60px -30px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+            transform: rotateY(-8deg) rotateX(4deg) scale(0.95);
+            transform-style: preserve-3d;
+        }
+
+        .chat-mockup:hover {
+            transform: rotateY(-4deg) rotateX(2deg) scale(0.98);
+        }
+
+        .hero .chat-mockup {
+            transform: rotateY(-12deg) rotateX(6deg) scale(0.9);
+        }
+
+        .hero .chat-mockup:hover {
+            transform: rotateY(-6deg) rotateX(3deg) scale(0.92);
         }
 
         .chat-header {
@@ -1434,35 +1456,37 @@
                     <a href="#book-demo" class="btn btn-primary">Book a Free Demo →</a>
                     <a href="#how-it-works" class="btn btn-ghost">See How It Works</a>
                 </div>
-                <div class="chat-mockup fade-up">
-                    <div class="chat-header">
-                        <span class="chat-dot red"></span>
-                        <span class="chat-dot yellow"></span>
-                        <span class="chat-dot green"></span>
-                        <span class="chat-title">Leanos Assistant</span>
-                    </div>
-                    <div class="chat-messages">
-                        <div class="chat-message user">
-                            <div class="chat-bubble">What were the payment terms we agreed with Miller & Associates?</div>
+                <div class="chat-mockup-wrapper fade-up">
+                    <div class="chat-mockup">
+                        <div class="chat-header">
+                            <span class="chat-dot red"></span>
+                            <span class="chat-dot yellow"></span>
+                            <span class="chat-dot green"></span>
+                            <span class="chat-title">Leanos Assistant</span>
                         </div>
-                        <div class="chat-message ai">
-                            <div class="chat-bubble">The payment terms with Miller & Associates are Net 30 with a 2% discount for early payment within 10 days. Late payments incur a 1.5% monthly interest charge.</div>
-                            <span class="chat-source">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                </svg>
-                                Contract_Miller_2024.pdf — Page 3
-                            </span>
-                        </div>
-                        <div class="chat-message user">
-                            <div class="chat-bubble">When does this contract expire?</div>
-                        </div>
-                        <div class="chat-message ai">
-                            <div class="typing-indicator" id="typing">
-                                <span class="typing-dot"></span>
-                                <span class="typing-dot"></span>
-                                <span class="typing-dot"></span>
+                        <div class="chat-messages">
+                            <div class="chat-message user">
+                                <div class="chat-bubble">What were the payment terms we agreed with Miller & Associates?</div>
+                            </div>
+                            <div class="chat-message ai">
+                                <div class="chat-bubble">The payment terms with Miller & Associates are Net 30 with a 2% discount for early payment within 10 days. Late payments incur a 1.5% monthly interest charge.</div>
+                                <span class="chat-source">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    Contract_Miller_2024.pdf — Page 3
+                                </span>
+                            </div>
+                            <div class="chat-message user">
+                                <div class="chat-bubble">When does this contract expire?</div>
+                            </div>
+                            <div class="chat-message ai">
+                                <div class="typing-indicator" id="typing">
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
