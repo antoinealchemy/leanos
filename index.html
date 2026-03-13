@@ -1,44 +1,1826 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leanos</title>
+    <title>DocuMind — Your Firm's Brain. Always On.</title>
+    <meta name="description" content="Private AI assistant trained on your internal documents. Your team asks questions in plain English. It answers instantly, with sources.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-surface: #111111;
+            --bg-surface-2: #1a1a1a;
+            --text-primary: #f5f0eb;
+            --text-secondary: #888888;
+            --accent: #c8ff00;
+            --accent-dim: rgba(200, 255, 0, 0.1);
+            --border: rgba(255, 255, 255, 0.07);
+            --border-hover: rgba(255, 255, 255, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-weight: 400;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 1000;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes typing {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(200, 255, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(200, 255, 0, 0.5); }
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(200, 255, 0, 0.3);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-surface);
+        }
+
+        .nav-cta {
+            display: block;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #fff;
+            padding: 140px 0 80px;
+            position: relative;
+            overflow: hidden;
         }
-        .container {
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(200, 255, 0, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
             text-align: center;
-            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
         }
-        h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 1rem;
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
         }
-        p {
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, var(--text-primary) 0%, rgba(245, 240, 235, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
             font-size: 1.25rem;
-            color: rgba(255,255,255,0.6);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        /* Chat Mockup */
+        .chat-mockup {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--bg-surface-2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chat-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .chat-dot.red { background: #ff5f57; }
+        .chat-dot.yellow { background: #febc2e; }
+        .chat-dot.green { background: #28c840; }
+
+        .chat-title {
+            margin-left: 12px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .chat-messages {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 85%;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+        }
+
+        .chat-message.ai {
+            align-self: flex-start;
+        }
+
+        .chat-bubble {
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .chat-message.user .chat-bubble {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+        }
+
+        .chat-message.ai .chat-bubble {
+            background: rgba(200, 255, 0, 0.08);
+            border: 1px solid rgba(200, 255, 0, 0.2);
+        }
+
+        .chat-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 14px 18px;
+            background: rgba(200, 255, 0, 0.08);
+            border: 1px solid rgba(200, 255, 0, 0.2);
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: typing 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        /* ===== PROOF BAR ===== */
+        .proof-bar {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .proof-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+        }
+
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 60px;
+            animation: marquee 30s linear infinite;
+            flex-shrink: 0;
+        }
+
+        .marquee-item {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            opacity: 0.6;
+        }
+
+        /* ===== PROBLEM SECTION ===== */
+        .problem {
+            padding: 120px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-surface-2);
+            transform: translateY(-4px);
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .problem-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .problem-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-dim);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        /* ===== SOLUTION SECTION ===== */
+        .solution {
+            padding: 120px 0;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .solution-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .solution-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .solution-step {
+            display: flex;
+            gap: 24px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: var(--accent);
+            color: #0a0a0a;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .step-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .solution-visual {
+            position: relative;
+        }
+
+        /* ===== FEATURES SECTION ===== */
+        .features {
+            padding: 120px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* ===== ROI CALCULATOR ===== */
+        .roi {
+            padding: 120px 0;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .roi-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .roi-calculator {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .calc-input {
+            margin-bottom: 32px;
+        }
+
+        .calc-input label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .calc-input .value-display {
+            font-size: 1.5rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .calc-input input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--bg-surface-2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .calc-input input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .calc-input input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .calc-results {
+            border-top: 1px solid var(--border);
+            padding-top: 32px;
+        }
+
+        .calc-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .calc-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .calc-result-item span:first-child {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .calc-result-item span:last-child {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .calc-result-item.highlight span:last-child {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            padding: 120px 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .testimonial-stars {
+            color: var(--accent);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-surface-2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .testimonial-info h4 {
+            font-size: 0.95rem;
+            font-family: 'Syne', sans-serif;
+            margin-bottom: 4px;
+        }
+
+        .testimonial-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== TEAM SECTION ===== */
+        .team {
+            padding: 120px 0;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .team-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--accent-dim), var(--bg-surface-2));
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .team-card h3 {
+            font-size: 1.25rem;
+            font-family: 'Syne', sans-serif;
+            margin-bottom: 8px;
+        }
+
+        .team-card .title {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .team-card .bio {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .team-social a {
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .team-social a:hover {
+            color: var(--accent);
+        }
+
+        /* ===== PRICING ===== */
+        .pricing {
+            padding: 120px 0;
+        }
+
+        .pricing-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            border: 2px solid var(--accent);
+            border-radius: 24px;
+            padding: 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent);
+        }
+
+        .pricing-label {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .pricing-price {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            margin-bottom: 8px;
+        }
+
+        .pricing-term {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features .check {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .pricing-note {
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== FAQ ===== */
+        .faq {
+            padding: 120px 0;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--accent);
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding-bottom: 24px;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ===== FINAL CTA ===== */
+        .final-cta {
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(ellipse at center, rgba(200, 255, 0, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .final-cta .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 16px;
+        }
+
+        .final-cta p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .guarantee-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+            padding: 12px 20px;
+            background: var(--accent-dim);
+            border: 1px solid rgba(200, 255, 0, 0.3);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .footer-logo span {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-tagline {
+            width: 100%;
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .problem-grid,
+            .features-grid,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solution-content,
+            .roi-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .solution-visual {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links,
+            .nav-cta {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .problem-grid,
+            .features-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-card {
+                padding: 32px 24px;
+            }
+
+            .pricing-price {
+                font-size: 3rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .chat-mockup {
+                margin: 0 -24px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .hero-ctas .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .calc-result-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Leanos</h1>
-        <p>Coming soon</p>
-    </div>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 2L8 14H14V30L24 18H18L22 8L16 2Z" fill="currentColor"/>
+                    <path d="M6 12L2 20H8L6 12Z" fill="currentColor" opacity="0.6"/>
+                    <path d="M26 12L30 20H24L26 12Z" fill="currentColor" opacity="0.6"/>
+                </svg>
+                DocuMind
+            </a>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">How it works</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <a href="#book-demo" class="btn btn-primary nav-cta">Book a Free Demo →</a>
+            <button class="mobile-menu-btn" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge fade-up">
+                    <span class="dot"></span>
+                    Now live for US Law & CPA Firms
+                </div>
+                <h1 class="fade-up">Your Firm's Brain.<br>Always On.</h1>
+                <p class="hero-subtitle fade-up">We build a private AI assistant trained on your internal documents — contracts, procedures, emails, files. Your team asks questions in plain English. It answers instantly, with sources.</p>
+                <div class="hero-ctas fade-up">
+                    <a href="#book-demo" class="btn btn-primary">Book a Free Demo →</a>
+                    <a href="#how-it-works" class="btn btn-ghost">See How It Works</a>
+                </div>
+                <div class="chat-mockup fade-up">
+                    <div class="chat-header">
+                        <span class="chat-dot red"></span>
+                        <span class="chat-dot yellow"></span>
+                        <span class="chat-dot green"></span>
+                        <span class="chat-title">DocuMind Assistant</span>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="chat-message user">
+                            <div class="chat-bubble">What were the payment terms we agreed with Miller & Associates?</div>
+                        </div>
+                        <div class="chat-message ai">
+                            <div class="chat-bubble">The payment terms with Miller & Associates are Net 30 with a 2% discount for early payment within 10 days. Late payments incur a 1.5% monthly interest charge.</div>
+                            <span class="chat-source">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                Contract_Miller_2024.pdf — Page 3
+                            </span>
+                        </div>
+                        <div class="chat-message user">
+                            <div class="chat-bubble">When does this contract expire?</div>
+                        </div>
+                        <div class="chat-message ai">
+                            <div class="typing-indicator" id="typing">
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROOF BAR -->
+    <section class="proof-bar">
+        <p class="proof-text">Trusted by accounting and legal teams across the US</p>
+        <div class="marquee">
+            <div class="marquee-content">
+                <span class="marquee-item">Harrison & Cole CPA</span>
+                <span class="marquee-item">Meridian Legal Group</span>
+                <span class="marquee-item">Summit Accounting Partners</span>
+                <span class="marquee-item">Blackwell Law Firm</span>
+                <span class="marquee-item">Atlas CPA Associates</span>
+                <span class="marquee-item">Vantage Legal</span>
+                <span class="marquee-item">Pinnacle Tax Advisors</span>
+                <span class="marquee-item">Sterling & Associates</span>
+                <span class="marquee-item">Cornerstone Law Partners</span>
+                <span class="marquee-item">Apex Financial Group</span>
+            </div>
+            <div class="marquee-content" aria-hidden="true">
+                <span class="marquee-item">Harrison & Cole CPA</span>
+                <span class="marquee-item">Meridian Legal Group</span>
+                <span class="marquee-item">Summit Accounting Partners</span>
+                <span class="marquee-item">Blackwell Law Firm</span>
+                <span class="marquee-item">Atlas CPA Associates</span>
+                <span class="marquee-item">Vantage Legal</span>
+                <span class="marquee-item">Pinnacle Tax Advisors</span>
+                <span class="marquee-item">Sterling & Associates</span>
+                <span class="marquee-item">Cornerstone Law Partners</span>
+                <span class="marquee-item">Apex Financial Group</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="problem" id="results">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Sound familiar?</h2>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card fade-up">
+                    <div class="problem-icon">⏱️</div>
+                    <h3>Hours lost every week</h3>
+                    <p>Your team spends 2-4 hours per week just searching for information that already exists somewhere in your files. That's $39,000/year in lost billable time for a 5-person team.</p>
+                </div>
+                <div class="problem-card fade-up">
+                    <div class="problem-icon">🎓</div>
+                    <h3>New hires take forever to ramp</h3>
+                    <p>Every new associate or accountant needs weeks to learn where things are. You answer the same questions. Again. And again.</p>
+                </div>
+                <div class="problem-card fade-up">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>One missed document = real risk</h3>
+                    <p>A contract clause buried in a 200-page PDF. A compliance update from 2022. One missed detail can cost you a client — or worse.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTION -->
+    <section class="solution" id="how-it-works">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Meet your firm's always-on AI assistant.</h2>
+                <p>Private. Secure. Trained on YOUR documents.</p>
+            </div>
+            <div class="solution-content">
+                <div class="solution-steps">
+                    <div class="solution-step fade-up">
+                        <div class="step-number">01</div>
+                        <div class="step-content">
+                            <h3>We collect & index your documents</h3>
+                            <p>PDFs, Word docs, emails, contracts, procedures — everything. Our AI expert organizes and indexes your entire knowledge base in a private, secure environment.</p>
+                        </div>
+                    </div>
+                    <div class="solution-step fade-up">
+                        <div class="step-number">02</div>
+                        <div class="step-content">
+                            <h3>Your AI assistant goes live</h3>
+                            <p>In 7 days, your team has access to a chat interface. They ask questions in plain English. The AI answers with the exact source and page number.</p>
+                        </div>
+                    </div>
+                    <div class="solution-step fade-up">
+                        <div class="step-number">03</div>
+                        <div class="step-content">
+                            <h3>We train your team</h3>
+                            <p>A 1-hour onboarding session gets everyone up to speed. We're available for 30 days after launch to ensure full adoption.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-visual fade-up">
+                    <div class="chat-mockup">
+                        <div class="chat-header">
+                            <span class="chat-dot red"></span>
+                            <span class="chat-dot yellow"></span>
+                            <span class="chat-dot green"></span>
+                            <span class="chat-title">DocuMind Assistant</span>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="chat-message user">
+                                <div class="chat-bubble">What's our standard engagement letter for new audit clients?</div>
+                            </div>
+                            <div class="chat-message ai">
+                                <div class="chat-bubble">Here's the standard engagement letter template for new audit clients. It includes scope of services, fee structure, and liability limitations as per our 2024 guidelines.</div>
+                                <span class="chat-source">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    Templates/Engagement_Letter_Audit_2024.docx
+                                </span>
+                            </div>
+                            <div class="chat-message user">
+                                <div class="chat-bubble">Show me the fee structure section</div>
+                            </div>
+                            <div class="chat-message ai">
+                                <div class="chat-bubble">Section 4 - Fee Structure:<br><br>• Fixed fee for annual audit: Determined based on scope<br>• Hourly rates for additional services: Partner $350/hr, Senior $200/hr, Staff $125/hr<br>• Payment terms: 50% upfront, 50% upon completion<br>• Travel expenses billed at cost</div>
+                                <span class="chat-source">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    Templates/Engagement_Letter_Audit_2024.docx — Page 2
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Built for firms that can't afford to lose information.</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">🔒</div>
+                    <h3>100% Private & Local</h3>
+                    <p>Your data never leaves your infrastructure. No third-party access. No training on your documents. Full data sovereignty.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">⚡</div>
+                    <h3>20-Second Answers</h3>
+                    <p>From question to answer in under 30 seconds. With the source document and page number attached.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">📄</div>
+                    <h3>Any Document Type</h3>
+                    <p>PDFs, Word, Excel, emails, Google Docs, Notion pages — if it contains text, we index it.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Context-Aware</h3>
+                    <p>The AI understands your firm's specific terminology, client names, and internal processes. Not generic — yours.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">👥</div>
+                    <h3>Team Training Included</h3>
+                    <p>We onboard your entire team. No IT department needed. If your staff can use Google, they can use this.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Always Up to Date</h3>
+                    <p>Add new documents anytime. The AI learns from them automatically. Your knowledge base grows with your firm.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI CALCULATOR -->
+    <section class="roi">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>What is search time actually costing you?</h2>
+            </div>
+            <div class="roi-content">
+                <div class="roi-text fade-up">
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 1.5rem; margin-bottom: 16px;">The hidden cost of "Where's that file?"</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.8;">Every time someone on your team spends 15 minutes digging through folders, emails, or asking colleagues for a document — that's billable time evaporating.</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.8;">For a typical 5-person firm, we've calculated an average of <strong style="color: var(--text-primary);">$39,000 per year</strong> lost to document searches alone.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">Use the calculator to see your numbers. Then ask yourself: is $6,000 too much to solve this forever?</p>
+                </div>
+                <div class="roi-calculator fade-up">
+                    <div class="calc-input">
+                        <label>Number of employees</label>
+                        <div class="value-display" id="employees-value">5</div>
+                        <input type="range" id="employees" min="2" max="50" value="5">
+                    </div>
+                    <div class="calc-input">
+                        <label>Hours lost per week per employee</label>
+                        <div class="value-display" id="hours-value">2h</div>
+                        <input type="range" id="hours" min="1" max="5" value="2">
+                    </div>
+                    <div class="calc-input">
+                        <label>Average hourly cost ($)</label>
+                        <div class="value-display" id="rate-value">$75</div>
+                        <input type="range" id="rate" min="50" max="200" value="75" step="25">
+                    </div>
+                    <div class="calc-results">
+                        <div class="calc-result-item">
+                            <span>Weekly cost of search time</span>
+                            <span id="weekly-cost">$750</span>
+                        </div>
+                        <div class="calc-result-item">
+                            <span>Annual cost</span>
+                            <span id="annual-cost">$39,000</span>
+                        </div>
+                        <div class="calc-result-item">
+                            <span>Your investment</span>
+                            <span>$6,000</span>
+                        </div>
+                        <div class="calc-result-item">
+                            <span>Payback period</span>
+                            <span id="payback">8 weeks</span>
+                        </div>
+                        <div class="calc-result-item highlight">
+                            <span>ROI Year 1</span>
+                            <span id="roi">6.5x</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>What our clients say</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-up">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"We used to spend Friday afternoons just digging through old client files. Now we ask the AI. It's like having a paralegal who has read every document we've ever produced."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JR</div>
+                        <div class="testimonial-info">
+                            <h4>James R.</h4>
+                            <p>Managing Partner, Coastal Law Group</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Setup was done in 5 days. My team was using it by day 6. The ROI was visible within the first week — we stopped losing time on document hunts."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SM</div>
+                        <div class="testimonial-info">
+                            <h4>Sarah M.</h4>
+                            <p>Controller, Meridian CPA Partners</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I was skeptical. My firm is small, 8 people. But at $6,000 for something that saves us 10+ hours a week, it paid for itself in the first month."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">DK</div>
+                        <div class="testimonial-info">
+                            <h4>David K.</h4>
+                            <p>Founding Partner, Blackwell & Associates</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="team">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Built by AI engineers who understand professional services.</h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card fade-up">
+                    <div class="team-avatar">👨‍💻</div>
+                    <h3>Antoine Perreaut</h3>
+                    <p class="title">AI Systems Engineer & Founder</p>
+                    <p class="bio">Antoine has built AI document systems for professional services firms across Europe and the US. He personally oversees every client implementation.</p>
+                    <div class="team-social">
+                        <a href="#" aria-label="LinkedIn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Simple pricing. No surprises.</h2>
+            </div>
+            <div class="pricing-card fade-up">
+                <div class="pricing-label">Complete Setup</div>
+                <div class="pricing-price">$6,000</div>
+                <div class="pricing-term">one-time payment</div>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Full document indexing</li>
+                    <li><span class="check">✓</span> Custom AI assistant setup</li>
+                    <li><span class="check">✓</span> Team training session (1h)</li>
+                    <li><span class="check">✓</span> 30-day post-launch support</li>
+                    <li><span class="check">✓</span> Live in 7 business days</li>
+                    <li><span class="check">✓</span> 30-day satisfaction guarantee</li>
+                </ul>
+                <a href="#book-demo" class="btn btn-primary" style="width: 100%; justify-content: center;">Book a Free Demo →</a>
+                <p class="pricing-note">Need ongoing document updates? Ask about our maintenance plan starting at $500/month.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header fade-up">
+                <h2>Questions we get asked.</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        Is my data secure?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. Your documents are processed and stored in a private environment that you control. We never use your documents to train any external AI model. Your data stays yours.</p>
+                    </div>
+                </div>
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        What types of documents can you index?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>PDFs, Word documents, Excel files, emails, Google Docs, Notion pages, and most text-based formats. If it contains text, we can index it.</p>
+                    </div>
+                </div>
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        How long does setup take?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We go live in 7 business days from the moment we receive your documents.</p>
+                    </div>
+                </div>
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        Do I need a technical team to manage this?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No. Once set up, the system runs on its own. Adding new documents is as simple as uploading a file. We train your team during onboarding.</p>
+                    </div>
+                </div>
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        What happens if the AI gives wrong answers?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our 30-day satisfaction guarantee means if the system doesn't perform to your expectations, we rebuild and retrain it at no extra cost.</p>
+                    </div>
+                </div>
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        Can multiple people use it at the same time?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. The system supports unlimited concurrent users within your firm.</p>
+                    </div>
+                </div>
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        What if I want to add new documents later?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>You can add documents at any time. We handle the re-indexing as part of post-launch support, or we can set up automatic indexing for certain folders.</p>
+                    </div>
+                </div>
+                <div class="faq-item fade-up">
+                    <button class="faq-question">
+                        Do you offer a trial or demo?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We offer a free 30-minute live demo where we show the system working with sample documents from your industry. Book yours below.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta" id="book-demo">
+        <div class="container">
+            <h2 class="fade-up">Ready to stop losing time in your own files?</h2>
+            <p class="fade-up">Book a free 30-minute demo. We'll show you the system live, with documents from your industry.</p>
+            <a href="#" class="btn btn-primary fade-up" style="font-size: 1.1rem; padding: 16px 32px;">Book My Free Demo →</a>
+            <p class="fade-up" style="margin-top: 16px; font-size: 0.9rem; color: var(--text-secondary);">No commitment. No credit card. Just a live demo.</p>
+            <div class="guarantee-badge fade-up">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+                30-Day Satisfaction Guarantee
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+                        <path d="M16 2L8 14H14V30L24 18H18L22 8L16 2Z" fill="currentColor"/>
+                        <path d="M6 12L2 20H8L6 12Z" fill="currentColor" opacity="0.6"/>
+                        <path d="M26 12L30 20H24L26 12Z" fill="currentColor" opacity="0.6"/>
+                    </svg>
+                    <span>DocuMind</span>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="#how-it-works">How it works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#book-demo">Book a Demo</a></li>
+                </ul>
+                <p class="footer-copy">© 2025 DocuMind AI — All rights reserved</p>
+            </div>
+            <p class="footer-tagline">Private AI. Your documents. Your control.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isActive = item.classList.contains('active');
+
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                // Open clicked if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // ROI Calculator
+        const employeesSlider = document.getElementById('employees');
+        const hoursSlider = document.getElementById('hours');
+        const rateSlider = document.getElementById('rate');
+
+        function updateCalculator() {
+            const employees = parseInt(employeesSlider.value);
+            const hours = parseInt(hoursSlider.value);
+            const rate = parseInt(rateSlider.value);
+
+            const weeklyCost = employees * hours * rate;
+            const annualCost = weeklyCost * 52;
+            const investment = 6000;
+            const paybackWeeks = Math.ceil(investment / weeklyCost);
+            const roi = (annualCost / investment).toFixed(1);
+
+            document.getElementById('employees-value').textContent = employees;
+            document.getElementById('hours-value').textContent = hours + 'h';
+            document.getElementById('rate-value').textContent = '$' + rate;
+            document.getElementById('weekly-cost').textContent = '$' + weeklyCost.toLocaleString();
+            document.getElementById('annual-cost').textContent = '$' + annualCost.toLocaleString();
+            document.getElementById('payback').textContent = paybackWeeks + ' weeks';
+            document.getElementById('roi').textContent = roi + 'x';
+        }
+
+        employeesSlider.addEventListener('input', updateCalculator);
+        hoursSlider.addEventListener('input', updateCalculator);
+        rateSlider.addEventListener('input', updateCalculator);
+
+        // Typing animation in hero chat
+        setTimeout(() => {
+            const typing = document.getElementById('typing');
+            if (typing) {
+                typing.innerHTML = `
+                    <div class="chat-bubble">The contract with Miller & Associates expires on December 31, 2025. There's an automatic renewal clause unless either party provides 60 days written notice.</div>
+                `;
+                typing.style.background = 'none';
+                typing.style.border = 'none';
+                typing.style.padding = '0';
+
+                const source = document.createElement('span');
+                source.className = 'chat-source';
+                source.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    Contract_Miller_2024.pdf — Page 8
+                `;
+                typing.parentElement.appendChild(source);
+            }
+        }, 3000);
+    </script>
 </body>
 </html>
