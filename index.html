@@ -3279,9 +3279,20 @@
                             updateVisibleCard(currentCard);
                             lastChangeTime = now;
                         } else {
-                            // On last card, hide overlay and scroll to next section
-                            hideOverlay();
-                            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+                            // On last card, fade out then scroll gently
+                            teamSection.style.opacity = '0';
+                            teamSection.style.transition = 'opacity 0.4s ease';
+                            setTimeout(() => {
+                                hideOverlay();
+                                window.scrollTo({
+                                    top: document.getElementById('pricing').offsetTop - 50,
+                                    behavior: 'smooth'
+                                });
+                                setTimeout(() => {
+                                    teamSection.style.opacity = '';
+                                    teamSection.style.transition = '';
+                                }, 500);
+                            }, 300);
                         }
                     }
                     // Swipe down (scroll up)
@@ -3291,9 +3302,19 @@
                             updateVisibleCard(currentCard);
                             lastChangeTime = now;
                         } else {
-                            // On first card, hide overlay and scroll to previous section
-                            hideOverlay();
-                            document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
+                            // On first card, fade out then scroll gently
+                            teamSection.style.opacity = '0';
+                            teamSection.style.transition = 'opacity 0.4s ease';
+                            setTimeout(() => {
+                                hideOverlay();
+                                document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
+                                setTimeout(() => {
+                                    teamSection.style.opacity = '';
+                                    teamSection.style.transition = '';
+                                    currentCard = 0;
+                                    updateVisibleCard(0);
+                                }, 500);
+                            }, 300);
                         }
                     }
                 }, { passive: true });
