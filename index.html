@@ -2116,7 +2116,7 @@
 
             .team .section-header {
                 position: absolute;
-                top: 40px;
+                top: 50px;
                 left: 0;
                 right: 0;
                 padding: 0 20px;
@@ -2125,8 +2125,8 @@
             }
 
             .team .section-header h2 {
-                font-size: 1.2rem;
-                line-height: 1.4;
+                font-size: 1.6rem;
+                line-height: 1.3;
             }
 
             .team-grid {
@@ -2137,7 +2137,7 @@
 
             .team-card {
                 position: absolute;
-                top: 55%;
+                top: 58%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 90%;
@@ -2835,7 +2835,7 @@
         </div>
         <div class="container">
             <div class="section-header">
-                <h2>Built by AI engineers who understand professional services.</h2>
+                <h2>Built by AI engineers who understand<br class="mobile-break"> professional services.</h2>
             </div>
             <div class="team-grid">
                 <div class="team-card visible" data-index="0">
@@ -3215,6 +3215,10 @@
 
             if (teamWrapper && teamSection) {
                 let currentCard = 0;
+                let isInTeamZone = false;
+                let touchStartY = 0;
+                let lastChangeTime = 0;
+                const changeCooldown = 400; // ms between card changes
 
                 function updateVisibleCard(index) {
                     teamCards.forEach((card, i) => {
@@ -3227,27 +3231,77 @@
                     });
                 }
 
-                window.addEventListener('scroll', () => {
-                    const wrapperRect = teamWrapper.getBoundingClientRect();
-                    const wrapperTop = wrapperRect.top;
-                    const wrapperHeight = wrapperRect.height;
-                    const windowHeight = window.innerHeight;
+                function isTeamSectionVisible() {
+                    const rect = teamWrapper.getBoundingClientRect();
+                    return rect.top <= 100 && rect.bottom > window.innerHeight;
+                }
 
-                    // Calculate scroll progress through the wrapper
-                    // 0 = just entered, 1 = about to leave
-                    const scrollProgress = Math.max(0, Math.min(1, -wrapperTop / (wrapperHeight - windowHeight)));
+                // Touch start
+                document.addEventListener('touchstart', (e) => {
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
 
-                    // Map progress to card index
-                    const cardIndex = Math.min(Math.floor(scrollProgress * totalCards), totalCards - 1);
+                // Touch end - detect swipe direction
+                document.addEventListener('touchend', (e) => {
+                    if (!isTeamSectionVisible()) return;
 
-                    if (cardIndex !== currentCard && cardIndex >= 0) {
-                        currentCard = cardIndex;
-                        updateVisibleCard(currentCard);
+                    const touchEndY = e.changedTouches[0].clientY;
+                    const deltaY = touchStartY - touchEndY;
+                    const now = Date.now();
+
+                    // Check cooldown
+                    if (now - lastChangeTime < changeCooldown) return;
+
+                    // Swipe up (scroll down) - need at least 30px movement
+                    if (deltaY > 30) {
+                        if (currentCard < totalCards - 1) {
+                            currentCard++;
+                            updateVisibleCard(currentCard);
+                            lastChangeTime = now;
+                        }
                     }
-                });
+                    // Swipe down (scroll up)
+                    else if (deltaY < -30) {
+                        if (currentCard > 0) {
+                            currentCard--;
+                            updateVisibleCard(currentCard);
+                            lastChangeTime = now;
+                        }
+                    }
+                }, { passive: true });
+
+                // Prevent default scroll when in team zone (except when at boundaries)
+                document.addEventListener('touchmove', (e) => {
+                    if (!isTeamSectionVisible()) return;
+
+                    const touch = e.touches[0];
+                    const deltaY = touchStartY - touch.clientY;
+
+                    // Block scroll if we're in the middle of team section
+                    if (currentCard > 0 && currentCard < totalCards - 1) {
+                        e.preventDefault();
+                    }
+                    // Block scroll down if not on last card
+                    else if (deltaY > 0 && currentCard < totalCards - 1) {
+                        e.preventDefault();
+                    }
+                    // Block scroll up if not on first card
+                    else if (deltaY < 0 && currentCard > 0) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
 
                 // Initialize first card as visible
                 updateVisibleCard(0);
+
+                // Reset when scrolling back up
+                window.addEventListener('scroll', () => {
+                    const rect = teamWrapper.getBoundingClientRect();
+                    if (rect.top > window.innerHeight) {
+                        currentCard = 0;
+                        updateVisibleCard(0);
+                    }
+                });
             }
         }
     </script>
