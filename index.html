@@ -3216,6 +3216,7 @@
             if (teamWrapper && teamSection) {
                 let currentCard = 0;
                 let isLocked = false;
+                let savedScrollY = 0;
                 let touchStartY = 0;
                 let lastChangeTime = 0;
                 const changeCooldown = 400;
@@ -3233,30 +3234,37 @@
 
                 function lockScroll() {
                     if (!isLocked) {
+                        savedScrollY = window.scrollY;
                         isLocked = true;
                         document.body.style.overflow = 'hidden';
                         document.body.style.position = 'fixed';
                         document.body.style.width = '100%';
-                        document.body.style.top = `-${window.scrollY}px`;
+                        document.body.style.top = `-${savedScrollY}px`;
                     }
                 }
 
-                function unlockScroll() {
+                function unlockScroll(scrollTo) {
                     if (isLocked) {
                         isLocked = false;
-                        const scrollY = document.body.style.top;
                         document.body.style.overflow = '';
                         document.body.style.position = '';
                         document.body.style.width = '';
                         document.body.style.top = '';
-                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                        window.scrollTo(0, savedScrollY);
+
+                        if (scrollTo) {
+                            setTimeout(() => {
+                                scrollTo.scrollIntoView({ behavior: 'smooth' });
+                            }, 50);
+                        }
                     }
                 }
 
                 function checkIfShouldLock() {
+                    if (isLocked) return;
                     const rect = teamSection.getBoundingClientRect();
                     // Lock when team section top is near viewport top
-                    if (rect.top <= 50 && rect.top >= -50 && !isLocked) {
+                    if (rect.top <= 80 && rect.top >= -20) {
                         lockScroll();
                     }
                 }
@@ -3287,10 +3295,7 @@
                             lastChangeTime = now;
                         } else {
                             // On last card, unlock and scroll to next section
-                            unlockScroll();
-                            setTimeout(() => {
-                                document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
-                            }, 50);
+                            unlockScroll(document.getElementById('pricing'));
                         }
                     }
                     // Swipe down (scroll up)
@@ -3301,10 +3306,7 @@
                             lastChangeTime = now;
                         } else {
                             // On first card, unlock and scroll to previous section
-                            unlockScroll();
-                            setTimeout(() => {
-                                document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
-                            }, 50);
+                            unlockScroll(document.querySelector('.testimonials'));
                         }
                     }
                 }, { passive: true });
