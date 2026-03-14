@@ -2027,40 +2027,33 @@
                             <span class="chat-title">Leanos Assistant</span>
                         </div>
                         <div class="chat-messages" id="chat-messages">
-                            <!-- Message 1: User question -->
-                            <div class="chat-message user" id="msg1">
+                            <!-- Message 1: User question (visible from start) -->
+                            <div class="chat-message user visible">
                                 <div class="chat-bubble">What were the payment terms we agreed with Miller & Associates?</div>
                             </div>
-                            <!-- Message 2: AI typing then response -->
-                            <div class="chat-message ai" id="msg2">
-                                <div class="typing-indicator" id="typing1">
-                                    <span class="typing-dot"></span>
-                                    <span class="typing-dot"></span>
-                                    <span class="typing-dot"></span>
-                                </div>
-                                <div class="chat-response" id="response1">
-                                    <div class="chat-bubble">The payment terms with Miller & Associates are Net 30 with a 2% discount for early payment within 10 days. Late payments incur a 1.5% monthly interest charge.</div>
-                                    <span class="chat-source">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                        </svg>
-                                        Contract_Miller_2024.pdf — Page 3
-                                    </span>
-                                </div>
+                            <!-- Message 2: AI response (visible from start) -->
+                            <div class="chat-message ai visible">
+                                <div class="chat-bubble">The payment terms with Miller & Associates are Net 30 with a 2% discount for early payment within 10 days. Late payments incur a 1.5% monthly interest charge.</div>
+                                <span class="chat-source">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    Contract_Miller_2024.pdf — Page 3
+                                </span>
                             </div>
-                            <!-- Message 3: Second user question -->
-                            <div class="chat-message user" id="msg3">
+                            <!-- Message 3: Second user question (visible from start) -->
+                            <div class="chat-message user visible">
                                 <div class="chat-bubble">When does this contract expire?</div>
                             </div>
-                            <!-- Message 4: AI typing then response -->
-                            <div class="chat-message ai" id="msg4">
-                                <div class="typing-indicator" id="typing2">
+                            <!-- Message 4: AI typing then response (animated) -->
+                            <div class="chat-message ai visible" id="msg-final">
+                                <div class="typing-indicator" id="typing-final">
                                     <span class="typing-dot"></span>
                                     <span class="typing-dot"></span>
                                     <span class="typing-dot"></span>
                                 </div>
-                                <div class="chat-response" id="response2">
+                                <div class="chat-response" id="response-final">
                                     <div class="chat-bubble">The contract with Miller & Associates expires on December 31, 2025. There's an automatic renewal clause unless either party provides 60 days written notice.</div>
                                     <span class="chat-source">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2630,41 +2623,16 @@
         hoursSlider.addEventListener('input', updateCalculator);
         rateSlider.addEventListener('input', updateCalculator);
 
-        // Animated Chat Demo
+        // Animated Chat Demo - only final response animates (once)
         function runChatAnimation() {
-            const msg1 = document.getElementById('msg1');
-            const msg2 = document.getElementById('msg2');
-            const msg3 = document.getElementById('msg3');
-            const msg4 = document.getElementById('msg4');
-            const typing1 = document.getElementById('typing1');
-            const typing2 = document.getElementById('typing2');
-            const response1 = document.getElementById('response1');
-            const response2 = document.getElementById('response2');
+            const typingFinal = document.getElementById('typing-final');
+            const responseFinal = document.getElementById('response-final');
 
-            // Reset all
-            [msg1, msg2, msg3, msg4].forEach(m => m.classList.remove('visible'));
-            [response1, response2].forEach(r => r.classList.remove('visible'));
-            [typing1, typing2].forEach(t => {
-                t.classList.remove('hidden');
-                t.style.display = 'flex';
-            });
-
-            // Animation sequence
-            setTimeout(() => msg1.classList.add('visible'), 500);           // User question 1
-            setTimeout(() => msg2.classList.add('visible'), 1500);          // Show AI message (with typing)
-            setTimeout(() => {                                               // Hide typing, show response
-                typing1.style.display = 'none';
-                response1.classList.add('visible');
-            }, 3500);
-            setTimeout(() => msg3.classList.add('visible'), 5500);          // User question 2
-            setTimeout(() => msg4.classList.add('visible'), 6500);          // Show AI message (with typing)
-            setTimeout(() => {                                               // Hide typing, show response
-                typing2.style.display = 'none';
-                response2.classList.add('visible');
-            }, 8500);
-
-            // Loop after pause
-            setTimeout(runChatAnimation, 14000);
+            // After 2.5 seconds, hide typing and show response
+            setTimeout(() => {
+                typingFinal.style.display = 'none';
+                responseFinal.classList.add('visible');
+            }, 2500);
         }
 
         // Start chat animation when page loads
