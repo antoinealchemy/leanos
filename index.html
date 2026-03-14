@@ -2111,17 +2111,20 @@
                 -webkit-overflow-scrolling: touch;
                 gap: 20px;
                 padding: 0 20px 20px;
-                animation: peekHint 1.5s ease-in-out 0.5s;
+                scroll-padding-left: 20px;
             }
 
             .team-grid::-webkit-scrollbar {
                 display: none;
             }
 
+            .team-card:first-child {
+                animation: peekHint 1s ease-in-out 1s;
+            }
+
             @keyframes peekHint {
                 0% { transform: translateX(0); }
-                30% { transform: translateX(-40px); }
-                60% { transform: translateX(-40px); }
+                40% { transform: translateX(-30px); }
                 100% { transform: translateX(0); }
             }
 
