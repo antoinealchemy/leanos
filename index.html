@@ -126,6 +126,39 @@
             100% { transform: translateX(-50%); }
         }
 
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -10px) rotate(2deg); }
+            50% { transform: translate(-5px, 15px) rotate(-1deg); }
+            75% { transform: translate(-15px, -5px) rotate(1deg); }
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -20px) scale(1.05); }
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.4; filter: blur(80px); }
+            50% { opacity: 0.6; filter: blur(100px); }
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.03; }
+            50% { opacity: 0.06; }
+        }
+
+        @keyframes lineGrow {
+            0% { transform: scaleX(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: scaleX(1); opacity: 0; }
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -356,6 +389,25 @@
             overflow: hidden;
         }
 
+        /* Hero Background Elements Container */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        /* Dot Grid Pattern */
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at center, var(--text-secondary) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.04;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        /* Main Gradient Glow */
         .hero::before {
             content: '';
             position: absolute;
@@ -371,6 +423,172 @@
         [data-theme="light"] .hero::before {
             background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.06) 0%, transparent 60%);
         }
+
+        /* Floating Gradient Orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .hero-orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.15) 0%, transparent 70%);
+            top: -20%;
+            right: -10%;
+            animation: floatSlow 20s ease-in-out infinite;
+        }
+
+        .hero-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.1) 0%, transparent 70%);
+            bottom: 10%;
+            left: -5%;
+            animation: floatSlow 25s ease-in-out infinite reverse;
+        }
+
+        .hero-orb-3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.08) 0%, transparent 70%);
+            top: 40%;
+            left: 60%;
+            animation: glow 15s ease-in-out infinite;
+        }
+
+        [data-theme="light"] .hero-orb-1 {
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.12) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .hero-orb-2 {
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.08) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .hero-orb-3 {
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.06) 0%, transparent 70%);
+        }
+
+        /* Floating Geometric Shapes */
+        .hero-shapes {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .hero-shape {
+            position: absolute;
+            border: 1px solid rgba(200, 255, 0, 0.15);
+            opacity: 0.6;
+        }
+
+        [data-theme="light"] .hero-shape {
+            border-color: rgba(0, 170, 85, 0.15);
+        }
+
+        .hero-shape-1 {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            top: 20%;
+            left: 10%;
+            animation: float 12s ease-in-out infinite;
+        }
+
+        .hero-shape-2 {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            top: 60%;
+            right: 8%;
+            transform: rotate(45deg);
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        .hero-shape-3 {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            bottom: 25%;
+            left: 15%;
+            animation: float 10s ease-in-out infinite;
+            animation-delay: -5s;
+        }
+
+        .hero-shape-4 {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            top: 30%;
+            right: 20%;
+            animation: float 18s ease-in-out infinite;
+            animation-delay: -3s;
+        }
+
+        /* Animated Lines */
+        .hero-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .hero-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200, 255, 0, 0.3), transparent);
+            animation: lineGrow 8s ease-in-out infinite;
+        }
+
+        [data-theme="light"] .hero-line {
+            background: linear-gradient(90deg, transparent, rgba(0, 170, 85, 0.3), transparent);
+        }
+
+        .hero-line-1 {
+            width: 200px;
+            top: 25%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .hero-line-2 {
+            width: 150px;
+            top: 45%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .hero-line-3 {
+            width: 180px;
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        /* Glowing Dots */
+        .hero-dots {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .hero-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: dotPulse 4s ease-in-out infinite;
+        }
+
+        .hero-dot-1 { top: 15%; left: 25%; animation-delay: 0s; }
+        .hero-dot-2 { top: 35%; right: 15%; animation-delay: 1s; }
+        .hero-dot-3 { bottom: 40%; left: 8%; animation-delay: 2s; }
+        .hero-dot-4 { top: 55%; left: 45%; animation-delay: 0.5s; }
+        .hero-dot-5 { bottom: 20%; right: 25%; animation-delay: 1.5s; }
+        .hero-dot-6 { top: 25%; right: 35%; animation-delay: 3s; }
 
         .hero .container {
             position: relative;
@@ -394,6 +612,12 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             margin-bottom: 32px;
+            box-shadow: 0 0 20px rgba(200, 255, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="light"] .hero-badge {
+            box-shadow: 0 0 20px rgba(0, 170, 85, 0.05);
         }
 
         .hero-badge .dot {
@@ -402,6 +626,7 @@
             background: var(--accent);
             border-radius: 50%;
             animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--accent);
         }
 
         .hero h1 {
@@ -411,6 +636,17 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            position: relative;
+        }
+
+        /* Accent line under title */
+        .hero-title-accent {
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin: 0 auto 24px;
+            border-radius: 2px;
         }
 
         .hero-subtitle {
@@ -434,6 +670,27 @@
             perspective: 1500px;
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        /* Glow effect behind mockup */
+        .chat-mockup-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(ellipse at center, rgba(200, 255, 0, 0.12) 0%, transparent 60%);
+            filter: blur(40px);
+            pointer-events: none;
+            z-index: -1;
+            animation: glow 6s ease-in-out infinite;
+        }
+
+        [data-theme="light"] .chat-mockup-wrapper::before {
+            background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.1) 0%, transparent 60%);
         }
 
         .chat-mockup {
@@ -445,14 +702,34 @@
             overflow: hidden;
             box-shadow:
                 0 50px 100px -20px var(--shadow),
-                0 30px 60px -30px rgba(0, 0, 0, 0.5);
+                0 30px 60px -30px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(200, 255, 0, 0.05);
             transition: all 0.5s ease;
             transform: rotateY(-8deg) rotateX(4deg) scale(0.95);
             transform-style: preserve-3d;
+            position: relative;
+        }
+
+        [data-theme="light"] .chat-mockup {
+            box-shadow:
+                0 50px 100px -20px var(--shadow),
+                0 30px 60px -30px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(0, 170, 85, 0.1);
         }
 
         .chat-mockup:hover {
             transform: rotateY(-4deg) rotateX(2deg) scale(0.98);
+            box-shadow:
+                0 60px 120px -20px var(--shadow),
+                0 40px 80px -30px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(200, 255, 0, 0.1);
+        }
+
+        [data-theme="light"] .chat-mockup:hover {
+            box-shadow:
+                0 60px 120px -20px var(--shadow),
+                0 40px 80px -30px rgba(0, 0, 0, 0.1),
+                0 0 40px rgba(0, 170, 85, 0.08);
         }
 
         .hero .chat-mockup {
@@ -1317,12 +1594,33 @@
                 height: 16px;
             }
 
+            /* Simplify hero effects on mobile for performance */
+            .hero-shapes,
+            .hero-lines,
+            .hero-dots {
+                display: none;
+            }
+
+            .hero-orb-1 {
+                width: 300px;
+                height: 300px;
+            }
+
+            .hero-orb-2,
+            .hero-orb-3 {
+                display: none;
+            }
+
             .hero h1 {
                 font-size: 2.5rem;
             }
 
             .hero-subtitle {
                 font-size: 1rem;
+            }
+
+            .hero-title-accent {
+                width: 60px;
             }
 
             .problem-grid,
@@ -1448,6 +1746,42 @@
 
     <!-- HERO -->
     <section class="hero">
+        <!-- Background Visual Elements -->
+        <div class="hero-bg">
+            <!-- Dot Grid -->
+            <div class="hero-grid"></div>
+
+            <!-- Gradient Orbs -->
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+
+            <!-- Floating Shapes -->
+            <div class="hero-shapes">
+                <div class="hero-shape hero-shape-1"></div>
+                <div class="hero-shape hero-shape-2"></div>
+                <div class="hero-shape hero-shape-3"></div>
+                <div class="hero-shape hero-shape-4"></div>
+            </div>
+
+            <!-- Animated Lines -->
+            <div class="hero-lines">
+                <div class="hero-line hero-line-1"></div>
+                <div class="hero-line hero-line-2"></div>
+                <div class="hero-line hero-line-3"></div>
+            </div>
+
+            <!-- Glowing Dots -->
+            <div class="hero-dots">
+                <div class="hero-dot hero-dot-1"></div>
+                <div class="hero-dot hero-dot-2"></div>
+                <div class="hero-dot hero-dot-3"></div>
+                <div class="hero-dot hero-dot-4"></div>
+                <div class="hero-dot hero-dot-5"></div>
+                <div class="hero-dot hero-dot-6"></div>
+            </div>
+        </div>
+
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge fade-up">
@@ -1455,6 +1789,7 @@
                     Now live for US Law & CPA Firms
                 </div>
                 <h1 class="fade-up">Your Firm's Brain.<br>Always On.</h1>
+                <span class="hero-title-accent fade-up"></span>
                 <p class="hero-subtitle fade-up">A private AI trained on your firm's documents.<br>Your team asks questions in plain English.<br>It answers instantly, with sources.</p>
                 <div class="hero-ctas fade-up">
                     <a href="#book-demo" class="btn btn-primary">Book a Free Demo →</a>
