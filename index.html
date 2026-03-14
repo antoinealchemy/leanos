@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leanos — Your Firm's Brain. Always On.</title>
+    <title>Leanos | Your Firm's Brain. Always On.</title>
     <meta name="description" content="Private AI assistant trained on your internal documents. Your team asks questions in plain English. It answers instantly, with sources.">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -927,6 +927,9 @@
         }
 
         #chat-demo .chat-response {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
             opacity: 0;
             transition: opacity 0.8s ease-out;
         }
@@ -945,13 +948,17 @@
 
         .proof-text {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
             margin-bottom: 32px;
             text-transform: uppercase;
             letter-spacing: 0.15em;
             font-family: 'Inter', sans-serif;
             font-weight: 500;
+        }
+
+        .mobile-break {
+            display: none;
         }
 
         .logos-grid {
@@ -1015,6 +1022,14 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .mobile-break {
+                display: block;
+            }
+
             .logos-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 28px;
@@ -1022,11 +1037,11 @@
             }
 
             .logo-slot {
-                height: 65px;
+                height: 80px;
             }
 
             .logo-slot img {
-                height: 55px;
+                height: 70px;
             }
 
             /* Stagger for 2x2: top-right, bottom-left, top-left, bottom-right */
@@ -2045,7 +2060,7 @@
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                     </svg>
-                                    Contract_Miller_2024.pdf — Page 3
+                                    Contract_Miller_2024.pdf | Page 3
                                 </span>
                             </div>
                             <!-- Message 3: Second user question (visible from start) -->
@@ -2066,7 +2081,7 @@
                                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                             <polyline points="14 2 14 8 20 8"></polyline>
                                         </svg>
-                                        Contract_Miller_2024.pdf — Page 7
+                                        Contract_Miller_2024.pdf | Page 7
                                     </span>
                                 </div>
                             </div>
@@ -2079,7 +2094,7 @@
 
     <!-- PROOF BAR -->
     <section class="proof-bar">
-        <p class="proof-text">Trusted by accounting and legal teams across the US</p>
+        <p class="proof-text">Trusted by accounting and<br class="mobile-break"> legal teams across the US</p>
         <div class="logos-grid">
             <div class="logo-slot">
                 <img src="logos/harrison.png" alt="Harrison & Cole" class="logo-a">
@@ -2108,19 +2123,19 @@
             </div>
             <div class="problem-grid">
                 <div class="problem-card fade-up">
-                    <div class="problem-icon">⏱️</div>
+                    <div class="problem-icon">◐</div>
                     <h3>Hours lost every week</h3>
                     <p>Your team spends 2-4 hours per week just searching for information that already exists somewhere in your files. That's $39,000/year in lost billable time for a 5-person team.</p>
                 </div>
                 <div class="problem-card fade-up">
-                    <div class="problem-icon">🎓</div>
+                    <div class="problem-icon">◒</div>
                     <h3>New hires take forever to ramp</h3>
                     <p>Every new associate or accountant needs weeks to learn where things are. You answer the same questions. Again. And again.</p>
                 </div>
                 <div class="problem-card fade-up">
-                    <div class="problem-icon">⚠️</div>
+                    <div class="problem-icon">◑</div>
                     <h3>One missed document = real risk</h3>
-                    <p>A contract clause buried in a 200-page PDF. A compliance update from 2022. One missed detail can cost you a client — or worse.</p>
+                    <p>A contract clause buried in a 200-page PDF. A compliance update from 2022. One missed detail can cost you a client, or worse.</p>
                 </div>
             </div>
         </div>
@@ -2139,7 +2154,7 @@
                         <div class="step-number">01</div>
                         <div class="step-content">
                             <h3>We collect & index your documents</h3>
-                            <p>PDFs, Word docs, emails, contracts, procedures — everything. Our AI expert organizes and indexes your entire knowledge base in a private, secure environment.</p>
+                            <p>PDFs, Word docs, emails, contracts, procedures, everything. Our AI expert organizes and indexes your entire knowledge base in a private, secure environment.</p>
                         </div>
                     </div>
                     <div class="solution-step fade-up">
@@ -2189,7 +2204,7 @@
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                     </svg>
-                                    Templates/Engagement_Letter_Audit_2024.docx — Page 2
+                                    Templates/Engagement_Letter_Audit_2024.docx | Page 2
                                 </span>
                             </div>
                         </div>
@@ -2207,32 +2222,32 @@
             </div>
             <div class="features-grid">
                 <div class="feature-card fade-up">
-                    <div class="feature-icon">🔒</div>
+                    <div class="feature-icon">◆</div>
                     <h3>100% Private & Local</h3>
                     <p>Your data never leaves your infrastructure. No third-party access. No training on your documents. Full data sovereignty.</p>
                 </div>
                 <div class="feature-card fade-up">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">◇</div>
                     <h3>20-Second Answers</h3>
                     <p>From question to answer in under 30 seconds. With the source document and page number attached.</p>
                 </div>
                 <div class="feature-card fade-up">
-                    <div class="feature-icon">📄</div>
+                    <div class="feature-icon">▣</div>
                     <h3>Any Document Type</h3>
-                    <p>PDFs, Word, Excel, emails, Google Docs, Notion pages — if it contains text, we index it.</p>
+                    <p>PDFs, Word, Excel, emails, Google Docs, Notion pages: if it contains text, we index it.</p>
                 </div>
                 <div class="feature-card fade-up">
-                    <div class="feature-icon">🧠</div>
+                    <div class="feature-icon">◈</div>
                     <h3>Context-Aware</h3>
-                    <p>The AI understands your firm's specific terminology, client names, and internal processes. Not generic — yours.</p>
+                    <p>The AI understands your firm's specific terminology, client names, and internal processes. Not generic, yours.</p>
                 </div>
                 <div class="feature-card fade-up">
-                    <div class="feature-icon">👥</div>
+                    <div class="feature-icon">●</div>
                     <h3>Team Training Included</h3>
                     <p>We onboard your entire team. No IT department needed. If your staff can use Google, they can use this.</p>
                 </div>
                 <div class="feature-card fade-up">
-                    <div class="feature-icon">🔄</div>
+                    <div class="feature-icon">○</div>
                     <h3>Always Up to Date</h3>
                     <p>Add new documents anytime. The AI learns from them automatically. Your knowledge base grows with your firm.</p>
                 </div>
@@ -2249,7 +2264,7 @@
             <div class="roi-content">
                 <div class="roi-text fade-up">
                     <h3 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 1.5rem; margin-bottom: 16px;">The hidden cost of "Where's that file?"</h3>
-                    <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.8;">Every time someone on your team spends 15 minutes digging through folders, emails, or asking colleagues for a document — that's billable time evaporating.</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.8;">Every time someone on your team spends 15 minutes digging through folders, emails, or asking colleagues for a document, that's billable time evaporating.</p>
                     <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.8;">For a typical 5-person firm, we've calculated an average of <strong style="color: var(--text-primary);">$39,000 per year</strong> lost to document searches alone.</p>
                     <p style="color: var(--text-secondary); line-height: 1.8;">Use the calculator to see your numbers. Then ask yourself: is $6,000 too much to solve this forever?</p>
                 </div>
@@ -2316,7 +2331,7 @@
                 </div>
                 <div class="testimonial-card fade-up">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Setup was done in 5 days. My team was using it by day 6. The ROI was visible within the first week — we stopped losing time on document hunts."</p>
+                    <p class="testimonial-text">"Setup was done in 5 days. My team was using it by day 6. The ROI was visible within the first week: we stopped losing time on document hunts."</p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">SM</div>
                         <div class="testimonial-info">
@@ -2348,7 +2363,7 @@
             </div>
             <div class="team-grid">
                 <div class="team-card fade-up">
-                    <div class="team-avatar">👨‍💻</div>
+                    <div class="team-avatar">AP</div>
                     <h3>Antoine Perreaut</h3>
                     <p class="title">AI Systems Engineer & Founder</p>
                     <p class="bio">Antoine has built AI document systems for professional services firms across Europe and the US. He personally oversees every client implementation.</p>
@@ -2502,7 +2517,7 @@
                     <li><a href="#faq">FAQ</a></li>
                     <li><a href="#book-demo">Book a Demo</a></li>
                 </ul>
-                <p class="footer-copy">© 2025 Leanos AI — All rights reserved</p>
+                <p class="footer-copy">© 2025 Leanos AI. All rights reserved</p>
             </div>
             <p class="footer-tagline">Private AI. Your documents. Your control.</p>
         </div>
