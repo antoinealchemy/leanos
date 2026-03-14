@@ -698,18 +698,16 @@
         /* Accent line under title */
         .hero-title-accent {
             display: block;
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
             margin: 0 auto 24px;
-            border-radius: 2px;
-            box-shadow: 0 0 12px rgba(200, 255, 0, 0.3);
+            border-radius: 1px;
+            opacity: 0.5;
         }
 
         [data-theme="light"] .hero-title-accent {
-            width: 120px;
-            height: 4px;
-            box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(0, 170, 85, 0.3);
+            opacity: 0.4;
         }
 
         .hero-subtitle {
@@ -1787,7 +1785,7 @@
             }
 
             .hero-title-accent {
-                width: 60px;
+                width: 40px;
             }
 
             .problem-grid,
