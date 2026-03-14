@@ -1574,6 +1574,82 @@
             background: var(--bg-surface);
             border-top: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .team-grid-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at center, var(--accent) 1.5px, transparent 1.5px);
+            background-size: 50px 50px;
+            opacity: 0.06;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        [data-theme="light"] .team-grid-pattern {
+            opacity: 0.1;
+        }
+
+        .team::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(ellipse at center, rgba(200, 255, 0, 0.08) 0%, rgba(200, 255, 0, 0.02) 40%, transparent 70%);
+            pointer-events: none;
+        }
+
+        [data-theme="light"] .team::before {
+            background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.08) 0%, rgba(0, 170, 85, 0.02) 40%, transparent 70%);
+        }
+
+        .team-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .team-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.15) 0%, rgba(200, 255, 0, 0.04) 40%, transparent 70%);
+            top: -20%;
+            left: -10%;
+            animation: floatSlow 18s ease-in-out infinite;
+        }
+
+        .team-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.12) 0%, rgba(200, 255, 0, 0.03) 40%, transparent 70%);
+            bottom: -15%;
+            right: -5%;
+            animation: floatSlow 22s ease-in-out infinite reverse;
+        }
+
+        [data-theme="light"] .team-orb-1 {
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.18) 0%, rgba(0, 170, 85, 0.06) 40%, transparent 70%);
+        }
+
+        [data-theme="light"] .team-orb-2 {
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.14) 0%, rgba(0, 170, 85, 0.04) 40%, transparent 70%);
+        }
+
+        .team .container {
+            position: relative;
+            z-index: 1;
         }
 
         .team-grid {
@@ -2700,6 +2776,11 @@
 
     <!-- TEAM -->
     <section class="team">
+        <div class="team-bg">
+            <div class="team-grid-pattern"></div>
+            <div class="team-orb team-orb-1"></div>
+            <div class="team-orb team-orb-2"></div>
+        </div>
         <div class="container">
             <div class="section-header fade-up">
                 <h2>Built by AI engineers who understand professional services.</h2>
