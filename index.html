@@ -2098,113 +2098,74 @@
             }
 
             .team {
-                padding: 0;
-                height: 100vh;
-                position: sticky;
-                top: 0;
-                z-index: 100;
-            }
-
-            .team .container {
-                padding: 0;
-                max-width: 100%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
+                padding: 60px 0;
             }
 
             .team .section-header {
-                position: absolute;
-                top: 50px;
-                left: 0;
-                right: 0;
-                padding: 0 20px;
+                padding: 0 20px 30px;
                 text-align: center;
-                z-index: 10;
             }
 
             .team .section-header h2 {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
                 line-height: 1.3;
             }
 
             .team-grid {
-                display: block;
-                position: relative;
-                height: 100%;
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                gap: 20px;
+                padding: 0 20px 20px;
+            }
+
+            .team-grid::-webkit-scrollbar {
+                display: none;
             }
 
             .team-card {
-                position: absolute;
-                top: 58%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 90%;
+                flex: 0 0 85%;
+                scroll-snap-align: center;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
                 align-items: center;
-                padding: 20px 24px;
+                padding: 20px;
                 border-radius: 0;
                 border: none;
-                max-width: 100%;
+                max-width: none;
                 background: transparent;
-                opacity: 0;
-                transition: opacity 0.4s ease, transform 0.4s ease;
-                pointer-events: none;
-            }
-
-            .team-card.visible {
-                opacity: 1;
-                pointer-events: auto;
-            }
-
-            .team-card.exit-up {
-                transform: translate(-50%, -100%);
-                opacity: 0;
             }
 
             .team-card .team-photo {
-                max-width: 300px;
-                width: 75vw;
+                max-width: 280px;
+                width: 70vw;
             }
 
-            .team-card[data-index="2"] .team-photo {
-                max-width: 340px;
-                width: 80vw;
+            .team-card:nth-child(3) .team-photo {
+                max-width: 320px;
+                width: 75vw;
             }
 
             .team-card .bio {
                 font-size: 0.9rem;
-                max-width: 340px;
+                max-width: 320px;
+                text-align: center;
             }
 
             .team-scroll-hint {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 8px;
-                padding: 16px;
+                gap: 6px;
+                padding: 12px;
                 color: var(--text-secondary);
-                font-size: 0.85rem;
-                margin-top: 16px;
+                font-size: 0.8rem;
             }
 
             .team-wrapper {
-                display: block;
-                height: 160vh;
-                position: relative;
-            }
-
-            @keyframes bounce {
-                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-                40% { transform: translateY(-8px); }
-                60% { transform: translateY(-4px); }
-            }
-
-            .team-trigger {
-                display: none;
+                display: contents;
             }
 
             .pricing-card {
@@ -2823,11 +2784,8 @@
         </div>
     </section>
 
-    <!-- TEAM WRAPPER (for scroll hijack on mobile) -->
-    <div class="team-wrapper" id="team-wrapper">
-
     <!-- TEAM -->
-    <section class="team" id="team-section">
+    <section class="team">
         <div class="team-bg">
             <div class="team-grid-pattern"></div>
             <div class="team-orb team-orb-1"></div>
@@ -2838,7 +2796,7 @@
                 <h2>Built by AI engineers who understand<br class="mobile-break"> professional services.</h2>
             </div>
             <div class="team-grid">
-                <div class="team-card visible" data-index="0">
+                <div class="team-card">
                     <div class="team-photo">
                         <img src="me.png" alt="Antoine Perreaut">
                     </div>
@@ -2852,7 +2810,7 @@
                         <span>1 / 3</span>
                     </div>
                 </div>
-                <div class="team-card" data-index="1">
+                <div class="team-card">
                     <div class="team-photo">
                         <img src="chinois.png" alt="Wei Chen">
                     </div>
@@ -2866,7 +2824,7 @@
                         <span>2 / 3</span>
                     </div>
                 </div>
-                <div class="team-card" data-index="2">
+                <div class="team-card">
                     <div class="team-photo">
                         <img src="indien.png" alt="Arjun Patel">
                     </div>
@@ -2880,8 +2838,6 @@
             </div>
         </div>
     </section>
-
-    </div><!-- end team-wrapper -->
 
     <!-- PRICING -->
     <section class="pricing" id="pricing">
@@ -3206,123 +3162,6 @@
         // Start chat animation when page loads
         runChatAnimation();
 
-        // Mobile team section scroll hijacking
-        if (window.innerWidth <= 768) {
-            const teamWrapper = document.getElementById('team-wrapper');
-            const teamSection = document.getElementById('team-section');
-            const teamCards = teamSection.querySelectorAll('.team-card');
-            const totalCards = teamCards.length;
-
-            if (teamWrapper && teamSection) {
-                let currentCard = 0;
-                let touchStartY = 0;
-                let lastChangeTime = 0;
-                const changeCooldown = 500;
-
-                // Create invisible overlay to capture touches
-                const overlay = document.createElement('div');
-                overlay.id = 'team-overlay';
-                overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;display:none;';
-                document.body.appendChild(overlay);
-
-                function updateVisibleCard(index) {
-                    teamCards.forEach((card, i) => {
-                        card.classList.remove('visible', 'exit-up');
-                        if (i === index) {
-                            card.classList.add('visible');
-                        } else if (i < index) {
-                            card.classList.add('exit-up');
-                        }
-                    });
-                }
-
-                function showOverlay() {
-                    overlay.style.display = 'block';
-                }
-
-                function hideOverlay() {
-                    overlay.style.display = 'none';
-                }
-
-                function isInTeamZone() {
-                    const rect = teamSection.getBoundingClientRect();
-                    return rect.top <= 100 && rect.bottom >= window.innerHeight - 100;
-                }
-
-                // Scroll listener to show/hide overlay
-                window.addEventListener('scroll', () => {
-                    if (isInTeamZone() && overlay.style.display === 'none') {
-                        showOverlay();
-                    }
-                }, { passive: true });
-
-                // Overlay touch handlers
-                overlay.addEventListener('touchstart', (e) => {
-                    touchStartY = e.touches[0].clientY;
-                }, { passive: true });
-
-                overlay.addEventListener('touchmove', (e) => {
-                    e.preventDefault();
-                }, { passive: false });
-
-                overlay.addEventListener('touchend', (e) => {
-                    const touchEndY = e.changedTouches[0].clientY;
-                    const deltaY = touchStartY - touchEndY;
-                    const now = Date.now();
-
-                    if (now - lastChangeTime < changeCooldown) return;
-
-                    // Swipe up (scroll down)
-                    if (deltaY > 40) {
-                        if (currentCard < totalCards - 1) {
-                            currentCard++;
-                            updateVisibleCard(currentCard);
-                            lastChangeTime = now;
-                        } else {
-                            // On last card, fade out then scroll gently
-                            teamSection.style.opacity = '0';
-                            teamSection.style.transition = 'opacity 0.4s ease';
-                            setTimeout(() => {
-                                hideOverlay();
-                                window.scrollTo({
-                                    top: document.getElementById('pricing').offsetTop - 50,
-                                    behavior: 'smooth'
-                                });
-                                setTimeout(() => {
-                                    teamSection.style.opacity = '';
-                                    teamSection.style.transition = '';
-                                }, 500);
-                            }, 300);
-                        }
-                    }
-                    // Swipe down (scroll up)
-                    else if (deltaY < -40) {
-                        if (currentCard > 0) {
-                            currentCard--;
-                            updateVisibleCard(currentCard);
-                            lastChangeTime = now;
-                        } else {
-                            // On first card, fade out then scroll gently
-                            teamSection.style.opacity = '0';
-                            teamSection.style.transition = 'opacity 0.4s ease';
-                            setTimeout(() => {
-                                hideOverlay();
-                                document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
-                                setTimeout(() => {
-                                    teamSection.style.opacity = '';
-                                    teamSection.style.transition = '';
-                                    currentCard = 0;
-                                    updateVisibleCard(0);
-                                }, 500);
-                            }, 300);
-                        }
-                    }
-                }, { passive: true });
-
-                // Initialize first card as visible
-                updateVisibleCard(0);
-            }
-        }
     </script>
 </body>
 </html>
