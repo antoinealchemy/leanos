@@ -930,34 +930,97 @@
             font-weight: 500;
         }
 
-        .marquee {
-            display: flex;
-            overflow: hidden;
-            user-select: none;
+        .logos-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 24px 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        .marquee-content {
-            display: flex;
-            gap: 60px;
-            animation: marquee 30s linear infinite;
-            flex-shrink: 0;
-        }
-
-        .marquee-item {
+        .logo-item {
             display: flex;
             align-items: center;
-            white-space: nowrap;
-            opacity: 0.6;
-            transition: opacity 0.3s ease;
+            justify-content: center;
+            padding: 12px;
+            animation: logoFade 6s ease-in-out infinite;
         }
 
-        .marquee-item:hover {
-            opacity: 0.9;
-        }
-
-        .marquee-item svg {
-            height: 44px;
+        .logo-item svg {
+            height: 38px;
             width: auto;
+            max-width: 100%;
+        }
+
+        /* Staggered fade animations - different timings */
+        .logo-item:nth-child(1) { animation-delay: 0s; animation-duration: 5s; }
+        .logo-item:nth-child(2) { animation-delay: 1.5s; animation-duration: 6s; }
+        .logo-item:nth-child(3) { animation-delay: 0.8s; animation-duration: 5.5s; }
+        .logo-item:nth-child(4) { animation-delay: 2.2s; animation-duration: 6.5s; }
+        .logo-item:nth-child(5) { animation-delay: 0.3s; animation-duration: 5s; }
+        .logo-item:nth-child(6) { animation-delay: 1.8s; animation-duration: 7s; }
+        .logo-item:nth-child(7) { animation-delay: 2.5s; animation-duration: 5.5s; }
+        .logo-item:nth-child(8) { animation-delay: 0.6s; animation-duration: 6s; }
+        .logo-item:nth-child(9) { animation-delay: 1.2s; animation-duration: 6.5s; }
+        .logo-item:nth-child(10) { animation-delay: 2s; animation-duration: 5s; }
+
+        @keyframes logoFade {
+            0%, 100% { opacity: 0.5; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Logo colors */
+        .logo-item.navy svg text { fill: #1e3a5f; }
+        .logo-item.navy svg path, .logo-item.navy svg rect, .logo-item.navy svg circle, .logo-item.navy svg line { stroke: #1e3a5f; fill: #1e3a5f; }
+
+        .logo-item.gold svg text { fill: #9a7b2d; }
+        .logo-item.gold svg path, .logo-item.gold svg rect, .logo-item.gold svg circle { stroke: #9a7b2d; fill: #9a7b2d; }
+
+        .logo-item.teal svg text { fill: #2a6a6a; }
+        .logo-item.teal svg path, .logo-item.teal svg rect, .logo-item.teal svg circle { stroke: #2a6a6a; fill: #2a6a6a; }
+
+        .logo-item.maroon svg text { fill: #6b2a2a; }
+        .logo-item.maroon svg path, .logo-item.maroon svg rect, .logo-item.maroon svg circle { stroke: #6b2a2a; fill: #6b2a2a; }
+
+        .logo-item.forest svg text { fill: #2a5a3a; }
+        .logo-item.forest svg path, .logo-item.forest svg rect, .logo-item.forest svg circle { stroke: #2a5a3a; fill: #2a5a3a; }
+
+        .logo-item.purple svg text { fill: #4a3a6a; }
+        .logo-item.purple svg path, .logo-item.purple svg rect, .logo-item.purple svg circle { stroke: #4a3a6a; fill: #4a3a6a; }
+
+        .logo-item.bronze svg text { fill: #7a5a3a; }
+        .logo-item.bronze svg path, .logo-item.bronze svg rect, .logo-item.bronze svg circle { stroke: #7a5a3a; fill: #7a5a3a; }
+
+        .logo-item.steel svg text { fill: #3a4a5a; }
+        .logo-item.steel svg path, .logo-item.steel svg rect, .logo-item.steel svg circle { stroke: #3a4a5a; fill: #3a4a5a; }
+
+        .logo-item.crimson svg text { fill: #8b2a2a; }
+        .logo-item.crimson svg path, .logo-item.crimson svg rect, .logo-item.crimson svg circle { stroke: #8b2a2a; fill: #8b2a2a; }
+
+        .logo-item.indigo svg text { fill: #3a3a7a; }
+        .logo-item.indigo svg path, .logo-item.indigo svg rect, .logo-item.indigo svg circle { stroke: #3a3a7a; fill: #3a3a7a; }
+
+        @media (max-width: 900px) {
+            .logos-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .logo-item:nth-child(n+7) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logos-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .logo-item:nth-child(n+7) {
+                display: none;
+            }
+            .logo-item svg {
+                height: 30px;
+            }
         }
 
         /* ===== PROBLEM SECTION ===== */
@@ -1921,233 +1984,109 @@
     <!-- PROOF BAR -->
     <section class="proof-bar">
         <p class="proof-text">Trusted by accounting and legal teams across the US</p>
-        <div class="marquee">
-            <div class="marquee-content">
-                <!-- Harrison & Cole - Columns with elegant serif text -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 200 50" fill="currentColor">
-                        <!-- Pillars icon -->
-                        <rect x="0" y="4" width="28" height="3"/>
-                        <rect x="0" y="43" width="28" height="3"/>
-                        <rect x="3" y="7" width="3" height="36"/>
-                        <rect x="12" y="7" width="3" height="36"/>
-                        <rect x="22" y="7" width="3" height="36"/>
-                        <!-- Text -->
-                        <text x="36" y="24" font-family="Georgia, serif" font-size="14" font-weight="bold" letter-spacing="1">HARRISON</text>
-                        <text x="36" y="40" font-family="Georgia, serif" font-size="11" letter-spacing="2">&amp; COLE</text>
-                    </svg>
-                </div>
-
-                <!-- Meridian Legal - Scale of justice -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 180 50" fill="currentColor">
-                        <!-- Scale icon -->
-                        <circle cx="20" cy="8" r="4"/>
-                        <rect x="18" y="12" width="4" height="30"/>
-                        <rect x="8" y="42" width="24" height="3"/>
-                        <path d="M8 18 L20 14 L32 18" stroke="currentColor" stroke-width="2" fill="none"/>
-                        <path d="M4 18 Q4 26 10 26 L2 26 Q2 20 4 18"/>
-                        <path d="M36 18 Q36 26 30 26 L38 26 Q38 20 36 18"/>
-                        <!-- Text -->
-                        <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">MERIDIAN</text>
-                        <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">LEGAL GROUP</text>
-                    </svg>
-                </div>
-
-                <!-- Summit Accounting - Simple elegant text -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 180 50" fill="currentColor">
-                        <!-- S lettermark -->
-                        <text x="0" y="38" font-family="Georgia, serif" font-size="42" font-weight="bold" font-style="italic">S</text>
-                        <!-- Separator -->
-                        <rect x="32" y="10" width="1" height="30" opacity="0.5"/>
-                        <!-- Text -->
-                        <text x="42" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">SUMMIT</text>
-                        <text x="42" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="1">ACCOUNTING</text>
-                    </svg>
-                </div>
-
-                <!-- Blackwell Law - Shield with B -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 180 50" fill="currentColor">
-                        <!-- Shield -->
-                        <path d="M18 4 L34 10 L34 26 C34 36 26 42 18 46 C10 42 2 36 2 26 L2 10 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <text x="11" y="32" font-family="Georgia, serif" font-size="20" font-weight="bold">B</text>
-                        <!-- Text -->
-                        <text x="44" y="24" font-family="Georgia, serif" font-size="14" font-weight="bold" letter-spacing="1">BLACKWELL</text>
-                        <text x="44" y="40" font-family="Georgia, serif" font-size="10" letter-spacing="3">LAW FIRM</text>
-                    </svg>
-                </div>
-
-                <!-- Atlas CPA - Simple wordmark -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 130 50" fill="currentColor">
-                        <text x="0" y="32" font-family="Georgia, serif" font-size="26" font-weight="bold" letter-spacing="3">ATLAS</text>
-                        <text x="0" y="46" font-family="Georgia, serif" font-size="10" letter-spacing="4">CPA ASSOCIATES</text>
-                    </svg>
-                </div>
-
-                <!-- Vantage Legal - V monogram -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 160 50" fill="currentColor">
-                        <!-- V in square -->
-                        <rect x="2" y="6" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <text x="8" y="36" font-family="Georgia, serif" font-size="28" font-weight="bold">V</text>
-                        <!-- Text -->
-                        <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">VANTAGE</text>
-                        <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">LEGAL</text>
-                    </svg>
-                </div>
-
-                <!-- Pinnacle Tax - Mountain peak simple -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 170 50" fill="currentColor">
-                        <!-- Triangle/peak -->
-                        <path d="M20 6 L38 42 L2 42 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <!-- Text -->
-                        <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">PINNACLE</text>
-                        <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">TAX ADVISORS</text>
-                    </svg>
-                </div>
-
-                <!-- Sterling & Associates - Elegant S with serifs -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 200 50" fill="currentColor">
-                        <text x="0" y="34" font-family="Georgia, serif" font-size="28" font-weight="bold" font-style="italic">S&amp;A</text>
-                        <rect x="52" y="12" width="1" height="26" opacity="0.5"/>
-                        <text x="62" y="22" font-family="Georgia, serif" font-size="11" font-weight="bold" letter-spacing="1">STERLING</text>
-                        <text x="62" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="1">&amp; ASSOCIATES</text>
-                    </svg>
-                </div>
-
-                <!-- Cornerstone Law - Column lettermark -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 200 50" fill="currentColor">
-                        <!-- C with pillar style -->
-                        <rect x="4" y="6" width="24" height="4"/>
-                        <rect x="4" y="40" width="24" height="4"/>
-                        <rect x="4" y="10" width="4" height="30"/>
-                        <!-- Text -->
-                        <text x="38" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">CORNERSTONE</text>
-                        <text x="38" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="3">LAW PARTNERS</text>
-                    </svg>
-                </div>
-
-                <!-- Apex Financial - Clean A lettermark -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 170 50" fill="currentColor">
-                        <!-- Stylized A -->
-                        <path d="M20 42 L8 42 L20 6 L32 42 L20 42 M14 32 L26 32" fill="none" stroke="currentColor" stroke-width="2.5"/>
-                        <!-- Text -->
-                        <text x="44" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">APEX</text>
-                        <text x="44" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="2">FINANCIAL GROUP</text>
-                    </svg>
-                </div>
+        <div class="logos-grid">
+            <!-- Harrison & Cole - Navy -->
+            <div class="logo-item navy">
+                <svg viewBox="0 0 180 50">
+                    <rect x="0" y="4" width="28" height="3"/>
+                    <rect x="0" y="43" width="28" height="3"/>
+                    <rect x="3" y="7" width="3" height="36"/>
+                    <rect x="12" y="7" width="3" height="36"/>
+                    <rect x="22" y="7" width="3" height="36"/>
+                    <text x="36" y="24" font-family="Georgia, serif" font-size="14" font-weight="bold" letter-spacing="1">HARRISON</text>
+                    <text x="36" y="40" font-family="Georgia, serif" font-size="11" letter-spacing="2">&amp; COLE</text>
+                </svg>
             </div>
-            <div class="marquee-content" aria-hidden="true">
-                <!-- Harrison & Cole -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 200 50" fill="currentColor">
-                        <rect x="0" y="4" width="28" height="3"/>
-                        <rect x="0" y="43" width="28" height="3"/>
-                        <rect x="3" y="7" width="3" height="36"/>
-                        <rect x="12" y="7" width="3" height="36"/>
-                        <rect x="22" y="7" width="3" height="36"/>
-                        <text x="36" y="24" font-family="Georgia, serif" font-size="14" font-weight="bold" letter-spacing="1">HARRISON</text>
-                        <text x="36" y="40" font-family="Georgia, serif" font-size="11" letter-spacing="2">&amp; COLE</text>
-                    </svg>
-                </div>
 
-                <!-- Meridian Legal -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 180 50" fill="currentColor">
-                        <circle cx="20" cy="8" r="4"/>
-                        <rect x="18" y="12" width="4" height="30"/>
-                        <rect x="8" y="42" width="24" height="3"/>
-                        <path d="M8 18 L20 14 L32 18" stroke="currentColor" stroke-width="2" fill="none"/>
-                        <path d="M4 18 Q4 26 10 26 L2 26 Q2 20 4 18"/>
-                        <path d="M36 18 Q36 26 30 26 L38 26 Q38 20 36 18"/>
-                        <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">MERIDIAN</text>
-                        <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">LEGAL GROUP</text>
-                    </svg>
-                </div>
+            <!-- Meridian Legal - Gold -->
+            <div class="logo-item gold">
+                <svg viewBox="0 0 180 50">
+                    <circle cx="20" cy="8" r="4"/>
+                    <rect x="18" y="12" width="4" height="30"/>
+                    <rect x="8" y="42" width="24" height="3"/>
+                    <path d="M8 18 L20 14 L32 18" stroke-width="2" fill="none"/>
+                    <path d="M4 18 Q4 26 10 26 L2 26 Q2 20 4 18"/>
+                    <path d="M36 18 Q36 26 30 26 L38 26 Q38 20 36 18"/>
+                    <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">MERIDIAN</text>
+                    <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">LEGAL GROUP</text>
+                </svg>
+            </div>
 
-                <!-- Summit Accounting -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 180 50" fill="currentColor">
-                        <text x="0" y="38" font-family="Georgia, serif" font-size="42" font-weight="bold" font-style="italic">S</text>
-                        <rect x="32" y="10" width="1" height="30" opacity="0.5"/>
-                        <text x="42" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">SUMMIT</text>
-                        <text x="42" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="1">ACCOUNTING</text>
-                    </svg>
-                </div>
+            <!-- Summit Accounting - Teal -->
+            <div class="logo-item teal">
+                <svg viewBox="0 0 160 50">
+                    <text x="0" y="38" font-family="Georgia, serif" font-size="42" font-weight="bold" font-style="italic">S</text>
+                    <rect x="32" y="10" width="1" height="30" opacity="0.5"/>
+                    <text x="42" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">SUMMIT</text>
+                    <text x="42" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="1">ACCOUNTING</text>
+                </svg>
+            </div>
 
-                <!-- Blackwell Law -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 180 50" fill="currentColor">
-                        <path d="M18 4 L34 10 L34 26 C34 36 26 42 18 46 C10 42 2 36 2 26 L2 10 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <text x="11" y="32" font-family="Georgia, serif" font-size="20" font-weight="bold">B</text>
-                        <text x="44" y="24" font-family="Georgia, serif" font-size="14" font-weight="bold" letter-spacing="1">BLACKWELL</text>
-                        <text x="44" y="40" font-family="Georgia, serif" font-size="10" letter-spacing="3">LAW FIRM</text>
-                    </svg>
-                </div>
+            <!-- Blackwell Law - Maroon -->
+            <div class="logo-item maroon">
+                <svg viewBox="0 0 180 50">
+                    <path d="M18 4 L34 10 L34 26 C34 36 26 42 18 46 C10 42 2 36 2 26 L2 10 Z" fill="none" stroke-width="2"/>
+                    <text x="11" y="32" font-family="Georgia, serif" font-size="20" font-weight="bold">B</text>
+                    <text x="44" y="24" font-family="Georgia, serif" font-size="14" font-weight="bold" letter-spacing="1">BLACKWELL</text>
+                    <text x="44" y="40" font-family="Georgia, serif" font-size="10" letter-spacing="3">LAW FIRM</text>
+                </svg>
+            </div>
 
-                <!-- Atlas CPA -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 130 50" fill="currentColor">
-                        <text x="0" y="32" font-family="Georgia, serif" font-size="26" font-weight="bold" letter-spacing="3">ATLAS</text>
-                        <text x="0" y="46" font-family="Georgia, serif" font-size="10" letter-spacing="4">CPA ASSOCIATES</text>
-                    </svg>
-                </div>
+            <!-- Atlas CPA - Steel -->
+            <div class="logo-item steel">
+                <svg viewBox="0 0 130 50">
+                    <text x="0" y="32" font-family="Georgia, serif" font-size="26" font-weight="bold" letter-spacing="3">ATLAS</text>
+                    <text x="0" y="46" font-family="Georgia, serif" font-size="10" letter-spacing="4">CPA ASSOCIATES</text>
+                </svg>
+            </div>
 
-                <!-- Vantage Legal -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 160 50" fill="currentColor">
-                        <rect x="2" y="6" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <text x="8" y="36" font-family="Georgia, serif" font-size="28" font-weight="bold">V</text>
-                        <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">VANTAGE</text>
-                        <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">LEGAL</text>
-                    </svg>
-                </div>
+            <!-- Vantage Legal - Forest -->
+            <div class="logo-item forest">
+                <svg viewBox="0 0 160 50">
+                    <rect x="2" y="6" width="36" height="36" fill="none" stroke-width="2"/>
+                    <text x="8" y="36" font-family="Georgia, serif" font-size="28" font-weight="bold">V</text>
+                    <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">VANTAGE</text>
+                    <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">LEGAL</text>
+                </svg>
+            </div>
 
-                <!-- Pinnacle Tax -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 170 50" fill="currentColor">
-                        <path d="M20 6 L38 42 L2 42 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">PINNACLE</text>
-                        <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">TAX ADVISORS</text>
-                    </svg>
-                </div>
+            <!-- Pinnacle Tax - Purple -->
+            <div class="logo-item purple">
+                <svg viewBox="0 0 170 50">
+                    <path d="M20 6 L38 42 L2 42 Z" fill="none" stroke-width="2"/>
+                    <text x="48" y="24" font-family="Georgia, serif" font-size="13" font-weight="bold" letter-spacing="2">PINNACLE</text>
+                    <text x="48" y="40" font-family="Georgia, serif" font-size="9" letter-spacing="3">TAX ADVISORS</text>
+                </svg>
+            </div>
 
-                <!-- Sterling & Associates -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 200 50" fill="currentColor">
-                        <text x="0" y="34" font-family="Georgia, serif" font-size="28" font-weight="bold" font-style="italic">S&amp;A</text>
-                        <rect x="52" y="12" width="1" height="26" opacity="0.5"/>
-                        <text x="62" y="22" font-family="Georgia, serif" font-size="11" font-weight="bold" letter-spacing="1">STERLING</text>
-                        <text x="62" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="1">&amp; ASSOCIATES</text>
-                    </svg>
-                </div>
+            <!-- Sterling & Associates - Bronze -->
+            <div class="logo-item bronze">
+                <svg viewBox="0 0 180 50">
+                    <text x="0" y="34" font-family="Georgia, serif" font-size="28" font-weight="bold" font-style="italic">S&amp;A</text>
+                    <rect x="52" y="12" width="1" height="26" opacity="0.5"/>
+                    <text x="62" y="22" font-family="Georgia, serif" font-size="11" font-weight="bold" letter-spacing="1">STERLING</text>
+                    <text x="62" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="1">&amp; ASSOCIATES</text>
+                </svg>
+            </div>
 
-                <!-- Cornerstone Law -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 200 50" fill="currentColor">
-                        <rect x="4" y="6" width="24" height="4"/>
-                        <rect x="4" y="40" width="24" height="4"/>
-                        <rect x="4" y="10" width="4" height="30"/>
-                        <text x="38" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">CORNERSTONE</text>
-                        <text x="38" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="3">LAW PARTNERS</text>
-                    </svg>
-                </div>
+            <!-- Cornerstone Law - Crimson -->
+            <div class="logo-item crimson">
+                <svg viewBox="0 0 200 50">
+                    <rect x="4" y="6" width="24" height="4"/>
+                    <rect x="4" y="40" width="24" height="4"/>
+                    <rect x="4" y="10" width="4" height="30"/>
+                    <text x="38" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">CORNERSTONE</text>
+                    <text x="38" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="3">LAW PARTNERS</text>
+                </svg>
+            </div>
 
-                <!-- Apex Financial -->
-                <div class="marquee-item">
-                    <svg viewBox="0 0 170 50" fill="currentColor">
-                        <path d="M20 42 L8 42 L20 6 L32 42 L20 42 M14 32 L26 32" fill="none" stroke="currentColor" stroke-width="2.5"/>
-                        <text x="44" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">APEX</text>
-                        <text x="44" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="2">FINANCIAL GROUP</text>
-                    </svg>
-                </div>
+            <!-- Apex Financial - Indigo -->
+            <div class="logo-item indigo">
+                <svg viewBox="0 0 170 50">
+                    <path d="M20 42 L8 42 L20 6 L32 42 L20 42 M14 32 L26 32" fill="none" stroke-width="2.5"/>
+                    <text x="44" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" letter-spacing="2">APEX</text>
+                    <text x="44" y="38" font-family="Georgia, serif" font-size="9" letter-spacing="2">FINANCIAL GROUP</text>
+                </svg>
             </div>
         </div>
     </section>
