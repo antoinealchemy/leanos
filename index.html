@@ -1107,6 +1107,10 @@
             display: none;
         }
 
+        .mobile-only {
+            display: none;
+        }
+
         .logos-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -1174,6 +1178,10 @@
 
             .mobile-break {
                 display: block;
+            }
+
+            .mobile-only {
+                display: flex;
             }
 
             .logos-grid {
@@ -1591,6 +1599,7 @@
         .team-photo {
             width: 100%;
             max-width: 280px;
+            aspect-ratio: 1 / 1;
             margin: 0 auto 24px;
             border-radius: 12px;
             overflow: hidden;
@@ -1598,7 +1607,9 @@
 
         .team-photo img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
             display: block;
         }
 
@@ -2002,15 +2013,27 @@
                 grid-template-columns: 1fr;
             }
 
+            .team {
+                padding: 0;
+            }
+
+            .team .container {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .team .section-header {
+                padding: 60px 24px 30px;
+                text-align: center;
+            }
+
             .team-grid {
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
+                height: 75vh;
+                overflow-y: scroll;
+                scroll-snap-type: y mandatory;
                 -webkit-overflow-scrolling: touch;
-                gap: 16px;
-                padding: 0 16px 20px;
-                margin: 0 -16px;
+                display: flex;
+                flex-direction: column;
             }
 
             .team-grid::-webkit-scrollbar {
@@ -2018,9 +2041,45 @@
             }
 
             .team-card {
-                flex: 0 0 85%;
-                scroll-snap-align: center;
-                max-width: none;
+                min-height: 100%;
+                flex-shrink: 0;
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 30px 24px;
+                border-radius: 0;
+                border: none;
+                border-bottom: 1px solid var(--border);
+                max-width: 100%;
+                background: var(--bg-surface);
+            }
+
+            .team-card .team-photo {
+                max-width: 200px;
+            }
+
+            .team-card .bio {
+                font-size: 0.9rem;
+            }
+
+            .team-scroll-hint {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                padding: 16px;
+                color: var(--text-secondary);
+                font-size: 0.8rem;
+                animation: bounce 2s infinite;
+            }
+
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-8px); }
+                60% { transform: translateY(-4px); }
             }
 
             .pricing-card {
@@ -2653,6 +2712,12 @@
                     <h3>Antoine Perreaut</h3>
                     <p class="title">Founder & CEO</p>
                     <p class="bio">Antoine leads Leanos with a vision to transform how professional services firms access their knowledge. He personally oversees every client implementation.</p>
+                    <div class="team-scroll-hint mobile-only">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M19 12l-7 7-7-7"/>
+                        </svg>
+                        <span>1 / 3</span>
+                    </div>
                 </div>
                 <div class="team-card fade-up">
                     <div class="team-photo">
@@ -2661,14 +2726,23 @@
                     <h3>Wei Chen</h3>
                     <p class="title">AI Engineer, Conversational Systems</p>
                     <p class="bio">Wei specializes in natural language processing and chatbot architecture. He builds the intelligent conversation layer that understands your questions.</p>
+                    <div class="team-scroll-hint mobile-only">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M19 12l-7 7-7-7"/>
+                        </svg>
+                        <span>2 / 3</span>
+                    </div>
                 </div>
-                <div class="team-card fade-up">
+                <div class="team-card fade-up" data-last-card="true">
                     <div class="team-photo">
                         <img src="indien.png" alt="Arjun Patel">
                     </div>
                     <h3>Arjun Patel</h3>
                     <p class="title">AI Engineer, RAG & Indexing</p>
                     <p class="bio">Arjun designs the document indexing and retrieval systems. He ensures every answer comes with the exact source and page number.</p>
+                    <div class="team-scroll-hint mobile-only">
+                        <span>3 / 3</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2996,6 +3070,36 @@
 
         // Start chat animation when page loads
         runChatAnimation();
+
+        // Mobile team section scroll handling
+        if (window.innerWidth <= 768) {
+            const teamGrid = document.querySelector('.team-grid');
+            if (teamGrid) {
+                let lastScrollTime = 0;
+                let isAtEnd = false;
+
+                teamGrid.addEventListener('scroll', () => {
+                    // Check if we're at the end of the team grid
+                    const atEnd = teamGrid.scrollTop + teamGrid.clientHeight >= teamGrid.scrollHeight - 10;
+                    isAtEnd = atEnd;
+                });
+
+                // Detect when user tries to scroll past the last card
+                teamGrid.addEventListener('touchend', () => {
+                    if (isAtEnd) {
+                        const now = Date.now();
+                        if (now - lastScrollTime < 500) {
+                            // Double scroll at end, move to next section
+                            const pricing = document.getElementById('pricing');
+                            if (pricing) {
+                                pricing.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                        lastScrollTime = now;
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>
