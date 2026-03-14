@@ -3094,6 +3094,9 @@
         hoursSlider.addEventListener('input', updateCalculator);
         rateSlider.addEventListener('input', updateCalculator);
 
+        // Initialize calculator with default values
+        updateCalculator();
+
         // Animated Chat Demo - only final response animates (once)
         function runChatAnimation() {
             const typingFinal = document.getElementById('typing-final');
