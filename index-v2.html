@@ -159,6 +159,34 @@
             50% { transform: scale(1.5); opacity: 1; }
         }
 
+        /* Neural Network Animations */
+        @keyframes nodeFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(var(--float-x, 5px), var(--float-y, -8px)); }
+        }
+
+        @keyframes connectionPulse {
+            0%, 100% { stroke-opacity: 0.1; }
+            50% { stroke-opacity: 0.4; }
+        }
+
+        @keyframes dataFlow {
+            0% { stroke-dashoffset: 20; opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+
+        @keyframes centralPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px var(--accent); }
+            50% { transform: scale(1.05); box-shadow: 0 0 60px var(--accent), 0 0 100px rgba(200, 255, 0, 0.3); }
+        }
+
+        @keyframes docFloat {
+            0%, 100% { transform: translateY(0) rotate(var(--rotate, 0deg)); }
+            50% { transform: translateY(-10px) rotate(var(--rotate, 0deg)); }
+        }
+
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -389,7 +417,7 @@
             overflow: hidden;
         }
 
-        /* Hero Background Elements Container */
+        /* Hero Background - Neural Network Theme */
         .hero-bg {
             position: absolute;
             inset: 0;
@@ -397,254 +425,167 @@
             pointer-events: none;
         }
 
-        /* Dot Grid Pattern */
-        .hero-grid {
+        /* Neural Network SVG Container */
+        .neural-network {
             position: absolute;
             inset: 0;
-            background-image: radial-gradient(circle at center, var(--accent) 1.5px, transparent 1.5px);
-            background-size: 50px 50px;
-            opacity: 0.08;
-            animation: gridPulse 8s ease-in-out infinite;
+            width: 100%;
+            height: 100%;
         }
 
-        [data-theme="light"] .hero-grid {
-            opacity: 0.12;
+        .neural-network svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Connection Lines */
+        .neural-connection {
+            stroke: var(--accent);
+            stroke-width: 1;
+            fill: none;
+            stroke-opacity: 0.15;
+            animation: connectionPulse 4s ease-in-out infinite;
+        }
+
+        .neural-connection.active {
+            stroke-opacity: 0.4;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 4px var(--accent));
+        }
+
+        /* Data flow animation on connections */
+        .data-particle {
+            stroke: var(--accent);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 4, 16;
+            animation: dataFlow 3s linear infinite;
+        }
+
+        /* Document Nodes */
+        .doc-node {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: docFloat 6s ease-in-out infinite;
+        }
+
+        .doc-node svg {
+            width: 40px;
+            height: 48px;
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 1.5;
+            opacity: 0.6;
+            filter: drop-shadow(0 0 8px rgba(200, 255, 0, 0.2));
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .doc-node svg {
+            filter: drop-shadow(0 0 8px rgba(0, 170, 85, 0.2));
+        }
+
+        .doc-node:hover svg {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .doc-node-1 { top: 15%; left: 8%; --rotate: -5deg; animation-delay: 0s; }
+        .doc-node-2 { top: 25%; right: 12%; --rotate: 8deg; animation-delay: 1s; }
+        .doc-node-3 { top: 55%; left: 5%; --rotate: -3deg; animation-delay: 0.5s; }
+        .doc-node-4 { bottom: 25%; right: 8%; --rotate: 5deg; animation-delay: 1.5s; }
+        .doc-node-5 { top: 10%; left: 25%; --rotate: 3deg; animation-delay: 0.8s; }
+        .doc-node-6 { bottom: 15%; left: 15%; --rotate: -8deg; animation-delay: 2s; }
+        .doc-node-7 { top: 40%; right: 5%; --rotate: 6deg; animation-delay: 0.3s; }
+        .doc-node-8 { bottom: 35%; right: 18%; --rotate: -4deg; animation-delay: 1.2s; }
+
+        /* Central Brain Node */
+        .central-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.15) 0%, transparent 70%);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: centralPulse 3s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        [data-theme="light"] .central-node {
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.12) 0%, transparent 70%);
+        }
+
+        .central-node svg {
+            width: 50px;
+            height: 50px;
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 1.5;
+        }
+
+        /* Orbit rings around central node */
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px solid rgba(200, 255, 0, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        [data-theme="light"] .orbit-ring {
+            border-color: rgba(0, 170, 85, 0.15);
+        }
+
+        .orbit-ring-1 {
+            width: 200px;
+            height: 200px;
+        }
+
+        .orbit-ring-2 {
+            width: 320px;
+            height: 320px;
+        }
+
+        .orbit-ring-3 {
+            width: 480px;
+            height: 480px;
+        }
+
+        /* Small orbiting dots */
+        .orbit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
         }
 
         /* Main Gradient Glow */
         .hero::before {
             content: '';
             position: absolute;
-            top: -30%;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 120%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(200, 255, 0, 0.12) 0%, rgba(200, 255, 0, 0.04) 40%, transparent 70%);
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 255, 0, 0.12) 0%, rgba(200, 255, 0, 0.04) 40%, transparent 70%);
             pointer-events: none;
+            filter: blur(40px);
         }
 
         [data-theme="light"] .hero::before {
-            background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.1) 0%, rgba(0, 170, 85, 0.03) 40%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.15) 0%, rgba(0, 170, 85, 0.05) 40%, transparent 70%);
         }
-
-        /* Floating Gradient Orbs */
-        .hero-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            pointer-events: none;
-        }
-
-        .hero-orb-1 {
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(200, 255, 0, 0.18) 0%, rgba(200, 255, 0, 0.05) 40%, transparent 70%);
-            top: -25%;
-            right: -15%;
-            animation: floatSlow 20s ease-in-out infinite;
-        }
-
-        .hero-orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(200, 255, 0, 0.12) 0%, rgba(200, 255, 0, 0.04) 40%, transparent 70%);
-            bottom: 5%;
-            left: -10%;
-            animation: floatSlow 25s ease-in-out infinite reverse;
-        }
-
-        .hero-orb-3 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(200, 255, 0, 0.1) 0%, transparent 60%);
-            top: 35%;
-            left: 55%;
-            animation: glow 10s ease-in-out infinite;
-        }
-
-        [data-theme="light"] .hero-orb-1 {
-            background: radial-gradient(circle, rgba(0, 170, 85, 0.3) 0%, rgba(0, 170, 85, 0.1) 40%, transparent 70%);
-        }
-
-        [data-theme="light"] .hero-orb-2 {
-            background: radial-gradient(circle, rgba(0, 170, 85, 0.2) 0%, rgba(0, 170, 85, 0.06) 40%, transparent 70%);
-        }
-
-        [data-theme="light"] .hero-orb-3 {
-            background: radial-gradient(circle, rgba(0, 170, 85, 0.15) 0%, transparent 60%);
-        }
-
-        /* Floating Geometric Shapes */
-        .hero-shapes {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        .hero-shape {
-            position: absolute;
-            border: 1px solid rgba(200, 255, 0, 0.2);
-            opacity: 0.6;
-            box-shadow: 0 0 15px rgba(200, 255, 0, 0.05);
-        }
-
-        [data-theme="light"] .hero-shape {
-            border: 2px solid rgba(0, 170, 85, 0.3);
-            opacity: 0.7;
-            box-shadow: 0 0 20px rgba(0, 170, 85, 0.08);
-        }
-
-        .hero-shape-1 {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            top: 18%;
-            left: 8%;
-            animation: float 12s ease-in-out infinite;
-        }
-
-        .hero-shape-2 {
-            width: 140px;
-            height: 140px;
-            border-radius: 24px;
-            top: 55%;
-            right: 6%;
-            transform: rotate(45deg);
-            animation: float 15s ease-in-out infinite reverse;
-        }
-
-        .hero-shape-3 {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            bottom: 22%;
-            left: 12%;
-            animation: float 10s ease-in-out infinite;
-            animation-delay: -5s;
-        }
-
-        .hero-shape-4 {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            top: 28%;
-            right: 18%;
-            animation: float 18s ease-in-out infinite;
-            animation-delay: -3s;
-        }
-
-        .hero-shape-5 {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            top: 70%;
-            left: 35%;
-            animation: float 14s ease-in-out infinite;
-            animation-delay: -7s;
-        }
-
-        .hero-shape-6 {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            top: 12%;
-            right: 30%;
-            transform: rotate(30deg);
-            animation: float 16s ease-in-out infinite;
-            animation-delay: -2s;
-        }
-
-        /* Animated Lines */
-        .hero-lines {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .hero-line {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(200, 255, 0, 0.3), transparent);
-            animation: lineGrow 6s ease-in-out infinite;
-            box-shadow: 0 0 8px rgba(200, 255, 0, 0.15);
-        }
-
-        [data-theme="light"] .hero-line {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(0, 170, 85, 0.5), transparent);
-            box-shadow: 0 0 10px rgba(0, 170, 85, 0.2);
-        }
-
-        .hero-line-1 {
-            width: 250px;
-            top: 22%;
-            left: 3%;
-            animation-delay: 0s;
-        }
-
-        .hero-line-2 {
-            width: 200px;
-            top: 42%;
-            right: 5%;
-            animation-delay: 2s;
-        }
-
-        .hero-line-3 {
-            width: 220px;
-            bottom: 28%;
-            left: 15%;
-            animation-delay: 4s;
-        }
-
-        .hero-line-4 {
-            width: 180px;
-            top: 65%;
-            right: 20%;
-            animation-delay: 1s;
-        }
-
-        .hero-line-5 {
-            width: 160px;
-            top: 15%;
-            right: 35%;
-            animation-delay: 3s;
-        }
-
-        /* Glowing Dots */
-        .hero-dots {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        .hero-dot {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: dotPulse 3s ease-in-out infinite;
-            box-shadow: 0 0 8px var(--accent);
-        }
-
-        [data-theme="light"] .hero-dot {
-            width: 5px;
-            height: 5px;
-            box-shadow: 0 0 12px var(--accent), 0 0 20px var(--accent);
-        }
-
-        .hero-dot-1 { top: 12%; left: 22%; animation-delay: 0s; }
-        .hero-dot-2 { top: 32%; right: 12%; animation-delay: 0.5s; }
-        .hero-dot-3 { bottom: 38%; left: 6%; animation-delay: 1s; }
-        .hero-dot-4 { top: 52%; left: 42%; animation-delay: 0.3s; }
-        .hero-dot-5 { bottom: 18%; right: 22%; animation-delay: 0.8s; }
-        .hero-dot-6 { top: 22%; right: 32%; animation-delay: 1.5s; }
-        .hero-dot-7 { top: 68%; left: 28%; animation-delay: 0.2s; }
-        .hero-dot-8 { top: 45%; right: 38%; animation-delay: 1.2s; }
-        .hero-dot-9 { bottom: 32%; right: 8%; animation-delay: 0.7s; }
-        .hero-dot-10 { top: 8%; left: 48%; animation-delay: 1.8s; }
 
         .hero .container {
             position: relative;
@@ -1822,47 +1763,119 @@
 
     <!-- HERO -->
     <section class="hero">
-        <!-- Background Visual Elements -->
+        <!-- Neural Network Background -->
         <div class="hero-bg">
-            <!-- Dot Grid -->
-            <div class="hero-grid"></div>
+            <!-- SVG Connection Lines -->
+            <div class="neural-network">
+                <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+                    <!-- Connection lines from documents to center -->
+                    <path class="neural-connection" d="M100,120 Q300,200 600,400" style="animation-delay: 0s;"/>
+                    <path class="neural-connection active" d="M1050,200 Q850,300 600,400" style="animation-delay: 0.5s;"/>
+                    <path class="neural-connection" d="M80,440 Q250,420 600,400" style="animation-delay: 1s;"/>
+                    <path class="neural-connection" d="M1100,520 Q900,460 600,400" style="animation-delay: 1.5s;"/>
+                    <path class="neural-connection active" d="M300,80 Q450,200 600,400" style="animation-delay: 0.3s;"/>
+                    <path class="neural-connection" d="M180,600 Q350,500 600,400" style="animation-delay: 0.8s;"/>
+                    <path class="neural-connection" d="M1060,320 Q850,360 600,400" style="animation-delay: 1.2s;"/>
+                    <path class="neural-connection active" d="M1020,600 Q800,500 600,400" style="animation-delay: 0.6s;"/>
 
-            <!-- Gradient Orbs -->
-            <div class="hero-orb hero-orb-1"></div>
-            <div class="hero-orb hero-orb-2"></div>
-            <div class="hero-orb hero-orb-3"></div>
-
-            <!-- Floating Shapes -->
-            <div class="hero-shapes">
-                <div class="hero-shape hero-shape-1"></div>
-                <div class="hero-shape hero-shape-2"></div>
-                <div class="hero-shape hero-shape-3"></div>
-                <div class="hero-shape hero-shape-4"></div>
-                <div class="hero-shape hero-shape-5"></div>
-                <div class="hero-shape hero-shape-6"></div>
+                    <!-- Data flow particles -->
+                    <path class="data-particle" d="M100,120 Q300,200 600,400" style="animation-delay: 0s;"/>
+                    <path class="data-particle" d="M1050,200 Q850,300 600,400" style="animation-delay: 1s;"/>
+                    <path class="data-particle" d="M80,440 Q250,420 600,400" style="animation-delay: 2s;"/>
+                    <path class="data-particle" d="M300,80 Q450,200 600,400" style="animation-delay: 1.5s;"/>
+                    <path class="data-particle" d="M1020,600 Q800,500 600,400" style="animation-delay: 2.5s;"/>
+                </svg>
             </div>
 
-            <!-- Animated Lines -->
-            <div class="hero-lines">
-                <div class="hero-line hero-line-1"></div>
-                <div class="hero-line hero-line-2"></div>
-                <div class="hero-line hero-line-3"></div>
-                <div class="hero-line hero-line-4"></div>
-                <div class="hero-line hero-line-5"></div>
+            <!-- Orbit Rings -->
+            <div class="orbit-ring orbit-ring-1"></div>
+            <div class="orbit-ring orbit-ring-2"></div>
+            <div class="orbit-ring orbit-ring-3"></div>
+
+            <!-- Document Nodes -->
+            <div class="doc-node doc-node-1">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
+            </div>
+            <div class="doc-node doc-node-2">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
+            </div>
+            <div class="doc-node doc-node-3">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
+            </div>
+            <div class="doc-node doc-node-4">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
+            </div>
+            <div class="doc-node doc-node-5">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
+            </div>
+            <div class="doc-node doc-node-6">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
+            </div>
+            <div class="doc-node doc-node-7">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
+            </div>
+            <div class="doc-node doc-node-8">
+                <svg viewBox="0 0 24 32">
+                    <path d="M4 2h12l6 6v22H4V2z"/>
+                    <path d="M16 2v6h6"/>
+                    <line x1="8" y1="14" x2="18" y2="14"/>
+                    <line x1="8" y1="18" x2="18" y2="18"/>
+                    <line x1="8" y1="22" x2="14" y2="22"/>
+                </svg>
             </div>
 
-            <!-- Glowing Dots -->
-            <div class="hero-dots">
-                <div class="hero-dot hero-dot-1"></div>
-                <div class="hero-dot hero-dot-2"></div>
-                <div class="hero-dot hero-dot-3"></div>
-                <div class="hero-dot hero-dot-4"></div>
-                <div class="hero-dot hero-dot-5"></div>
-                <div class="hero-dot hero-dot-6"></div>
-                <div class="hero-dot hero-dot-7"></div>
-                <div class="hero-dot hero-dot-8"></div>
-                <div class="hero-dot hero-dot-9"></div>
-                <div class="hero-dot hero-dot-10"></div>
+            <!-- Central Brain/AI Node -->
+            <div class="central-node">
+                <svg viewBox="0 0 24 24">
+                    <!-- Brain icon -->
+                    <path d="M12 2C8 2 5 5 5 8c0 1.5.5 3 1.5 4C5.5 13 5 14.5 5 16c0 3 3 6 7 6s7-3 7-6c0-1.5-.5-3-1.5-4 1-1 1.5-2.5 1.5-4 0-3-3-6-7-6z"/>
+                    <path d="M12 2v20"/>
+                    <path d="M5 10h14"/>
+                    <path d="M7 6c2 1 3 2 5 2s3-1 5-2"/>
+                    <path d="M7 18c2-1 3-2 5-2s3 1 5 2"/>
+                </svg>
             </div>
         </div>
 
