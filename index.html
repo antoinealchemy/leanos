@@ -2115,7 +2115,18 @@
             }
 
             .team .section-header {
-                display: none;
+                position: absolute;
+                top: 40px;
+                left: 0;
+                right: 0;
+                padding: 0 20px;
+                text-align: center;
+                z-index: 10;
+            }
+
+            .team .section-header h2 {
+                font-size: 1.2rem;
+                line-height: 1.4;
             }
 
             .team-grid {
@@ -2126,7 +2137,7 @@
 
             .team-card {
                 position: absolute;
-                top: 50%;
+                top: 55%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 90%;
@@ -2134,7 +2145,7 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                padding: 30px 24px;
+                padding: 20px 24px;
                 border-radius: 0;
                 border: none;
                 max-width: 100%;
@@ -2159,6 +2170,11 @@
                 width: 75vw;
             }
 
+            .team-card[data-index="2"] .team-photo {
+                max-width: 340px;
+                width: 80vw;
+            }
+
             .team-card .bio {
                 font-size: 0.9rem;
                 max-width: 340px;
@@ -2177,7 +2193,7 @@
 
             .team-wrapper {
                 display: block;
-                height: 300vh;
+                height: 160vh;
                 position: relative;
             }
 
