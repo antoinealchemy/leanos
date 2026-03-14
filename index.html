@@ -2118,19 +2118,10 @@
                 display: none;
             }
 
-            .team-card:first-child {
-                animation: peekHint 1s ease-in-out 1s;
-            }
-
-            @keyframes peekHint {
-                0% { transform: translateX(0); }
-                40% { transform: translateX(-30px); }
-                100% { transform: translateX(0); }
-            }
 
             .team-card {
                 flex: 0 0 85%;
-                scroll-snap-align: center;
+                scroll-snap-align: start;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -2139,6 +2130,10 @@
                 border: none;
                 max-width: none;
                 background: transparent;
+            }
+
+            .team-card:first-child {
+                margin-left: 7.5%;
             }
 
             .team-card .team-photo {
