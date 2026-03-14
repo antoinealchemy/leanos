@@ -1707,6 +1707,10 @@
             line-height: 1.7;
         }
 
+        .team-trigger {
+            display: none;
+        }
+
         /* ===== PRICING ===== */
         .pricing {
             padding: 100px 0;
@@ -2091,36 +2095,51 @@
 
             .team {
                 padding: 0;
+                height: 100vh;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+
+            .team.active {
+                opacity: 1;
+                pointer-events: auto;
             }
 
             .team .container {
                 padding: 0;
                 max-width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
             }
 
             .team .section-header {
-                padding: 60px 24px 30px;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                padding: 0 24px;
                 text-align: center;
             }
 
             .team-grid {
-                height: 75vh;
-                overflow-y: scroll;
-                scroll-snap-type: y mandatory;
-                -webkit-overflow-scrolling: touch;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .team-grid::-webkit-scrollbar {
-                display: none;
+                display: block;
+                position: relative;
+                height: 100%;
             }
 
             .team-card {
-                min-height: 100%;
-                flex-shrink: 0;
-                scroll-snap-align: start;
-                scroll-snap-stop: always;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -2128,17 +2147,36 @@
                 padding: 30px 24px;
                 border-radius: 0;
                 border: none;
-                border-bottom: 1px solid var(--border);
                 max-width: 100%;
-                background: var(--bg-surface);
+                background: transparent;
+                opacity: 0;
+                transition: opacity 0.4s ease, transform 0.4s ease;
+                pointer-events: none;
+            }
+
+            .team-card.visible {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .team-card.exit-up {
+                transform: translate(-50%, -150%);
+                opacity: 0;
+            }
+
+            .team-card.enter-down {
+                transform: translate(-50%, 50%);
+                opacity: 0;
             }
 
             .team-card .team-photo {
-                max-width: 200px;
+                max-width: 280px;
+                width: 70vw;
             }
 
             .team-card .bio {
                 font-size: 0.9rem;
+                max-width: 320px;
             }
 
             .team-scroll-hint {
@@ -2148,14 +2186,25 @@
                 gap: 8px;
                 padding: 16px;
                 color: var(--text-secondary);
-                font-size: 0.8rem;
-                animation: bounce 2s infinite;
+                font-size: 0.85rem;
+                margin-top: 16px;
+            }
+
+            .team-spacer {
+                display: block;
+                height: 300vh;
             }
 
             @keyframes bounce {
                 0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
                 40% { transform: translateY(-8px); }
                 60% { transform: translateY(-4px); }
+            }
+
+            .team-trigger {
+                display: block;
+                height: 300vh;
+                pointer-events: none;
             }
 
             .pricing-card {
@@ -2774,19 +2823,22 @@
         </div>
     </section>
 
+    <!-- TEAM TRIGGER (for scroll hijack on mobile) -->
+    <div class="team-trigger" id="team-trigger"></div>
+
     <!-- TEAM -->
-    <section class="team">
+    <section class="team" id="team-section">
         <div class="team-bg">
             <div class="team-grid-pattern"></div>
             <div class="team-orb team-orb-1"></div>
             <div class="team-orb team-orb-2"></div>
         </div>
         <div class="container">
-            <div class="section-header fade-up">
+            <div class="section-header">
                 <h2>Built by AI engineers who understand professional services.</h2>
             </div>
             <div class="team-grid">
-                <div class="team-card fade-up">
+                <div class="team-card visible" data-index="0">
                     <div class="team-photo">
                         <img src="me.png" alt="Antoine Perreaut">
                     </div>
@@ -2800,7 +2852,7 @@
                         <span>1 / 3</span>
                     </div>
                 </div>
-                <div class="team-card fade-up">
+                <div class="team-card" data-index="1">
                     <div class="team-photo">
                         <img src="chinois.png" alt="Wei Chen">
                     </div>
@@ -2814,7 +2866,7 @@
                         <span>2 / 3</span>
                     </div>
                 </div>
-                <div class="team-card fade-up" data-last-card="true">
+                <div class="team-card" data-index="2">
                     <div class="team-photo">
                         <img src="indien.png" alt="Arjun Patel">
                     </div>
@@ -3152,33 +3204,63 @@
         // Start chat animation when page loads
         runChatAnimation();
 
-        // Mobile team section scroll handling
+        // Mobile team section scroll hijacking
         if (window.innerWidth <= 768) {
-            const teamGrid = document.querySelector('.team-grid');
-            if (teamGrid) {
-                let lastScrollTime = 0;
-                let isAtEnd = false;
+            const teamTrigger = document.getElementById('team-trigger');
+            const teamSection = document.getElementById('team-section');
+            const teamCards = teamSection.querySelectorAll('.team-card');
+            const totalCards = teamCards.length;
 
-                teamGrid.addEventListener('scroll', () => {
-                    // Check if we're at the end of the team grid
-                    const atEnd = teamGrid.scrollTop + teamGrid.clientHeight >= teamGrid.scrollHeight - 10;
-                    isAtEnd = atEnd;
-                });
+            if (teamTrigger && teamSection) {
+                let currentCard = 0;
+                let isInTeamZone = false;
 
-                // Detect when user tries to scroll past the last card
-                teamGrid.addEventListener('touchend', () => {
-                    if (isAtEnd) {
-                        const now = Date.now();
-                        if (now - lastScrollTime < 500) {
-                            // Double scroll at end, move to next section
-                            const pricing = document.getElementById('pricing');
-                            if (pricing) {
-                                pricing.scrollIntoView({ behavior: 'smooth' });
-                            }
+                function updateVisibleCard(index) {
+                    teamCards.forEach((card, i) => {
+                        card.classList.remove('visible', 'exit-up', 'enter-down');
+                        if (i === index) {
+                            card.classList.add('visible');
+                        } else if (i < index) {
+                            card.classList.add('exit-up');
+                        } else {
+                            card.classList.add('enter-down');
                         }
-                        lastScrollTime = now;
+                    });
+                }
+
+                window.addEventListener('scroll', () => {
+                    const triggerRect = teamTrigger.getBoundingClientRect();
+                    const triggerTop = triggerRect.top;
+                    const triggerHeight = triggerRect.height;
+                    const windowHeight = window.innerHeight;
+
+                    // Check if we're in the team trigger zone
+                    const inZone = triggerTop < windowHeight * 0.3 && triggerTop > -triggerHeight + windowHeight * 0.7;
+
+                    if (inZone) {
+                        if (!isInTeamZone) {
+                            isInTeamZone = true;
+                            teamSection.classList.add('active');
+                        }
+
+                        // Calculate which card should be visible based on scroll position
+                        const scrollProgress = (windowHeight * 0.3 - triggerTop) / (triggerHeight - windowHeight * 0.4);
+                        const cardIndex = Math.min(Math.max(Math.floor(scrollProgress * totalCards), 0), totalCards - 1);
+
+                        if (cardIndex !== currentCard) {
+                            currentCard = cardIndex;
+                            updateVisibleCard(currentCard);
+                        }
+                    } else {
+                        if (isInTeamZone) {
+                            isInTeamZone = false;
+                            teamSection.classList.remove('active');
+                        }
                     }
                 });
+
+                // Initialize first card as visible
+                updateVisibleCard(0);
             }
         }
     </script>
