@@ -2104,36 +2104,28 @@
             }
 
             .team-grid {
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
-                gap: 20px;
-                padding: 0 20px 20px;
-                scroll-padding-left: 20px;
+                position: relative;
+                min-height: 450px;
             }
-
-            .team-grid::-webkit-scrollbar {
-                display: none;
-            }
-
 
             .team-card {
-                flex: 0 0 85%;
-                scroll-snap-align: start;
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 350px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 padding: 20px;
-                border-radius: 0;
-                border: none;
-                max-width: none;
                 background: transparent;
+                opacity: 0;
+                transition: opacity 0.6s ease;
             }
 
-            .team-card:first-child {
-                margin-left: 7.5%;
+            .team-card.active {
+                opacity: 1;
             }
 
             .team-card .team-photo {
@@ -3127,6 +3119,30 @@
 
         // Start chat animation when page loads
         runChatAnimation();
+
+        // Team carousel auto-slide (mobile only)
+        if (window.innerWidth <= 768) {
+            const teamCards = document.querySelectorAll('.team-card');
+            let currentIndex = 0;
+
+            function showCard(index) {
+                teamCards.forEach((card, i) => {
+                    card.classList.remove('active');
+                    if (i === index) {
+                        card.classList.add('active');
+                    }
+                });
+            }
+
+            // Show first card
+            showCard(0);
+
+            // Auto-rotate every 3 seconds
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % teamCards.length;
+                showCard(currentIndex);
+            }, 3000);
+        }
 
     </script>
 </body>
