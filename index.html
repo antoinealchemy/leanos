@@ -3215,11 +3215,15 @@
 
             if (teamWrapper && teamSection) {
                 let currentCard = 0;
-                let isLocked = false;
-                let savedScrollY = 0;
                 let touchStartY = 0;
                 let lastChangeTime = 0;
-                const changeCooldown = 400;
+                const changeCooldown = 500;
+
+                // Create invisible overlay to capture touches
+                const overlay = document.createElement('div');
+                overlay.id = 'team-overlay';
+                overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;display:none;';
+                document.body.appendChild(overlay);
 
                 function updateVisibleCard(index) {
                     teamCards.forEach((card, i) => {
@@ -3232,62 +3236,36 @@
                     });
                 }
 
-                function lockScroll() {
-                    if (!isLocked) {
-                        savedScrollY = window.scrollY;
-                        isLocked = true;
-                        document.body.style.overflow = 'hidden';
-                        document.body.style.position = 'fixed';
-                        document.body.style.width = '100%';
-                        document.body.style.top = `-${savedScrollY}px`;
-                    }
+                function showOverlay() {
+                    overlay.style.display = 'block';
                 }
 
-                function unlockScroll(scrollTo) {
-                    if (isLocked) {
-                        isLocked = false;
-                        document.body.style.overflow = '';
-                        document.body.style.position = '';
-                        document.body.style.width = '';
-                        document.body.style.top = '';
-                        window.scrollTo(0, savedScrollY);
-
-                        if (scrollTo) {
-                            setTimeout(() => {
-                                scrollTo.scrollIntoView({ behavior: 'smooth' });
-                            }, 50);
-                        }
-                    }
+                function hideOverlay() {
+                    overlay.style.display = 'none';
                 }
 
-                function checkIfShouldLock() {
-                    if (isLocked) return;
+                function isInTeamZone() {
                     const rect = teamSection.getBoundingClientRect();
-                    // Lock when team section top is near viewport top
-                    if (rect.top <= 80 && rect.top >= -20) {
-                        lockScroll();
-                    }
+                    return rect.top <= 100 && rect.bottom >= window.innerHeight - 100;
                 }
 
-                // Check on scroll if we should lock
-                window.addEventListener('scroll', checkIfShouldLock, { passive: true });
+                // Scroll listener to show/hide overlay
+                window.addEventListener('scroll', () => {
+                    if (isInTeamZone() && overlay.style.display === 'none') {
+                        showOverlay();
+                    }
+                }, { passive: true });
 
-                // Touch start
-                document.addEventListener('touchstart', (e) => {
+                // Overlay touch handlers
+                overlay.addEventListener('touchstart', (e) => {
                     touchStartY = e.touches[0].clientY;
                 }, { passive: true });
 
-                // Block touchmove when locked
-                document.addEventListener('touchmove', (e) => {
-                    if (isLocked) {
-                        e.preventDefault();
-                    }
+                overlay.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
                 }, { passive: false });
 
-                // Touch end - detect swipe direction
-                document.addEventListener('touchend', (e) => {
-                    if (!isLocked) return;
-
+                overlay.addEventListener('touchend', (e) => {
                     const touchEndY = e.changedTouches[0].clientY;
                     const deltaY = touchStartY - touchEndY;
                     const now = Date.now();
@@ -3295,25 +3273,27 @@
                     if (now - lastChangeTime < changeCooldown) return;
 
                     // Swipe up (scroll down)
-                    if (deltaY > 30) {
+                    if (deltaY > 40) {
                         if (currentCard < totalCards - 1) {
                             currentCard++;
                             updateVisibleCard(currentCard);
                             lastChangeTime = now;
                         } else {
-                            // On last card, unlock and scroll to next section
-                            unlockScroll(document.getElementById('pricing'));
+                            // On last card, hide overlay and scroll to next section
+                            hideOverlay();
+                            document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
                         }
                     }
                     // Swipe down (scroll up)
-                    else if (deltaY < -30) {
+                    else if (deltaY < -40) {
                         if (currentCard > 0) {
                             currentCard--;
                             updateVisibleCard(currentCard);
                             lastChangeTime = now;
                         } else {
-                            // On first card, unlock and scroll to previous section
-                            unlockScroll(document.querySelector('.testimonials'));
+                            // On first card, hide overlay and scroll to previous section
+                            hideOverlay();
+                            document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
                         }
                     }
                 }, { passive: true });
