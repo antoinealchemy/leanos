@@ -3215,10 +3215,10 @@
 
             if (teamWrapper && teamSection) {
                 let currentCard = 0;
-                let isInTeamZone = false;
+                let isLocked = false;
                 let touchStartY = 0;
                 let lastChangeTime = 0;
-                const changeCooldown = 400; // ms between card changes
+                const changeCooldown = 400;
 
                 function updateVisibleCard(index) {
                     teamCards.forEach((card, i) => {
@@ -3231,10 +3231,38 @@
                     });
                 }
 
-                function isTeamSectionVisible() {
-                    const rect = teamWrapper.getBoundingClientRect();
-                    return rect.top <= 100 && rect.bottom > window.innerHeight;
+                function lockScroll() {
+                    if (!isLocked) {
+                        isLocked = true;
+                        document.body.style.overflow = 'hidden';
+                        document.body.style.position = 'fixed';
+                        document.body.style.width = '100%';
+                        document.body.style.top = `-${window.scrollY}px`;
+                    }
                 }
+
+                function unlockScroll() {
+                    if (isLocked) {
+                        isLocked = false;
+                        const scrollY = document.body.style.top;
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        document.body.style.width = '';
+                        document.body.style.top = '';
+                        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                    }
+                }
+
+                function checkIfShouldLock() {
+                    const rect = teamSection.getBoundingClientRect();
+                    // Lock when team section top is near viewport top
+                    if (rect.top <= 50 && rect.top >= -50 && !isLocked) {
+                        lockScroll();
+                    }
+                }
+
+                // Check on scroll if we should lock
+                window.addEventListener('scroll', checkIfShouldLock, { passive: true });
 
                 // Touch start
                 document.addEventListener('touchstart', (e) => {
@@ -3243,21 +3271,26 @@
 
                 // Touch end - detect swipe direction
                 document.addEventListener('touchend', (e) => {
-                    if (!isTeamSectionVisible()) return;
+                    if (!isLocked) return;
 
                     const touchEndY = e.changedTouches[0].clientY;
                     const deltaY = touchStartY - touchEndY;
                     const now = Date.now();
 
-                    // Check cooldown
                     if (now - lastChangeTime < changeCooldown) return;
 
-                    // Swipe up (scroll down) - need at least 30px movement
+                    // Swipe up (scroll down)
                     if (deltaY > 30) {
                         if (currentCard < totalCards - 1) {
                             currentCard++;
                             updateVisibleCard(currentCard);
                             lastChangeTime = now;
+                        } else {
+                            // On last card, unlock and scroll to next section
+                            unlockScroll();
+                            setTimeout(() => {
+                                document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+                            }, 50);
                         }
                     }
                     // Swipe down (scroll up)
@@ -3266,42 +3299,18 @@
                             currentCard--;
                             updateVisibleCard(currentCard);
                             lastChangeTime = now;
+                        } else {
+                            // On first card, unlock and scroll to previous section
+                            unlockScroll();
+                            setTimeout(() => {
+                                document.querySelector('.testimonials').scrollIntoView({ behavior: 'smooth' });
+                            }, 50);
                         }
                     }
                 }, { passive: true });
 
-                // Prevent default scroll when in team zone (except when at boundaries)
-                document.addEventListener('touchmove', (e) => {
-                    if (!isTeamSectionVisible()) return;
-
-                    const touch = e.touches[0];
-                    const deltaY = touchStartY - touch.clientY;
-
-                    // Block scroll if we're in the middle of team section
-                    if (currentCard > 0 && currentCard < totalCards - 1) {
-                        e.preventDefault();
-                    }
-                    // Block scroll down if not on last card
-                    else if (deltaY > 0 && currentCard < totalCards - 1) {
-                        e.preventDefault();
-                    }
-                    // Block scroll up if not on first card
-                    else if (deltaY < 0 && currentCard > 0) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-
                 // Initialize first card as visible
                 updateVisibleCard(0);
-
-                // Reset when scrolling back up
-                window.addEventListener('scroll', () => {
-                    const rect = teamWrapper.getBoundingClientRect();
-                    if (rect.top > window.innerHeight) {
-                        currentCard = 0;
-                        updateVisibleCard(0);
-                    }
-                });
             }
         }
     </script>
