@@ -1711,6 +1711,10 @@
             display: none;
         }
 
+        .team-wrapper {
+            display: contents;
+        }
+
         /* ===== PRICING ===== */
         .pricing {
             padding: 100px 0;
@@ -2096,19 +2100,9 @@
             .team {
                 padding: 0;
                 height: 100vh;
-                position: fixed;
+                position: sticky;
                 top: 0;
-                left: 0;
-                right: 0;
                 z-index: 100;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.3s ease;
-            }
-
-            .team.active {
-                opacity: 1;
-                pointer-events: auto;
             }
 
             .team .container {
@@ -2122,7 +2116,7 @@
 
             .team .section-header {
                 position: absolute;
-                top: 60px;
+                top: 80px;
                 left: 0;
                 right: 0;
                 padding: 0 24px;
@@ -2140,6 +2134,7 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
+                width: 90%;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -2160,23 +2155,18 @@
             }
 
             .team-card.exit-up {
-                transform: translate(-50%, -150%);
-                opacity: 0;
-            }
-
-            .team-card.enter-down {
-                transform: translate(-50%, 50%);
+                transform: translate(-50%, -100%);
                 opacity: 0;
             }
 
             .team-card .team-photo {
-                max-width: 280px;
-                width: 70vw;
+                max-width: 300px;
+                width: 75vw;
             }
 
             .team-card .bio {
                 font-size: 0.9rem;
-                max-width: 320px;
+                max-width: 340px;
             }
 
             .team-scroll-hint {
@@ -2190,9 +2180,9 @@
                 margin-top: 16px;
             }
 
-            .team-spacer {
-                display: block;
+            .team-wrapper {
                 height: 300vh;
+                position: relative;
             }
 
             @keyframes bounce {
@@ -2202,9 +2192,7 @@
             }
 
             .team-trigger {
-                display: block;
-                height: 300vh;
-                pointer-events: none;
+                display: none;
             }
 
             .pricing-card {
@@ -2823,8 +2811,8 @@
         </div>
     </section>
 
-    <!-- TEAM TRIGGER (for scroll hijack on mobile) -->
-    <div class="team-trigger" id="team-trigger"></div>
+    <!-- TEAM WRAPPER (for scroll hijack on mobile) -->
+    <div class="team-wrapper" id="team-wrapper">
 
     <!-- TEAM -->
     <section class="team" id="team-section">
@@ -2880,6 +2868,8 @@
             </div>
         </div>
     </section>
+
+    </div><!-- end team-wrapper -->
 
     <!-- PRICING -->
     <section class="pricing" id="pricing">
@@ -3206,56 +3196,41 @@
 
         // Mobile team section scroll hijacking
         if (window.innerWidth <= 768) {
-            const teamTrigger = document.getElementById('team-trigger');
+            const teamWrapper = document.getElementById('team-wrapper');
             const teamSection = document.getElementById('team-section');
             const teamCards = teamSection.querySelectorAll('.team-card');
             const totalCards = teamCards.length;
 
-            if (teamTrigger && teamSection) {
+            if (teamWrapper && teamSection) {
                 let currentCard = 0;
-                let isInTeamZone = false;
 
                 function updateVisibleCard(index) {
                     teamCards.forEach((card, i) => {
-                        card.classList.remove('visible', 'exit-up', 'enter-down');
+                        card.classList.remove('visible', 'exit-up');
                         if (i === index) {
                             card.classList.add('visible');
                         } else if (i < index) {
                             card.classList.add('exit-up');
-                        } else {
-                            card.classList.add('enter-down');
                         }
                     });
                 }
 
                 window.addEventListener('scroll', () => {
-                    const triggerRect = teamTrigger.getBoundingClientRect();
-                    const triggerTop = triggerRect.top;
-                    const triggerHeight = triggerRect.height;
+                    const wrapperRect = teamWrapper.getBoundingClientRect();
+                    const wrapperTop = wrapperRect.top;
+                    const wrapperHeight = wrapperRect.height;
                     const windowHeight = window.innerHeight;
 
-                    // Check if we're in the team trigger zone
-                    const inZone = triggerTop < windowHeight * 0.3 && triggerTop > -triggerHeight + windowHeight * 0.7;
+                    // Calculate scroll progress through the wrapper
+                    // 0 = just entered, 1 = about to leave
+                    const scrollProgress = Math.max(0, Math.min(1, -wrapperTop / (wrapperHeight - windowHeight)));
 
-                    if (inZone) {
-                        if (!isInTeamZone) {
-                            isInTeamZone = true;
-                            teamSection.classList.add('active');
-                        }
+                    // Map progress to card index
+                    const cardIndex = Math.min(Math.floor(scrollProgress * totalCards), totalCards - 1);
 
-                        // Calculate which card should be visible based on scroll position
-                        const scrollProgress = (windowHeight * 0.3 - triggerTop) / (triggerHeight - windowHeight * 0.4);
-                        const cardIndex = Math.min(Math.max(Math.floor(scrollProgress * totalCards), 0), totalCards - 1);
-
-                        if (cardIndex !== currentCard) {
-                            currentCard = cardIndex;
-                            updateVisibleCard(currentCard);
-                        }
-                    } else {
-                        if (isInTeamZone) {
-                            isInTeamZone = false;
-                            teamSection.classList.remove('active');
-                        }
+                    if (cardIndex !== currentCard && cardIndex >= 0) {
+                        currentCard = cardIndex;
+                        updateVisibleCard(currentCard);
                     }
                 });
 
