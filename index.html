@@ -982,9 +982,10 @@
             animation: logoSwapB 16s ease-in-out infinite;
         }
 
-        /* Make logos grayscale and brighter in dark mode */
+        /* Make logos grayscale and much brighter in dark mode */
         [data-theme="dark"] .logo-slot img {
-            filter: grayscale(100%) brightness(1.8) contrast(1.2);
+            filter: grayscale(100%) brightness(3) contrast(1.3);
+            opacity: 0.9;
         }
 
         /* Stagger: position 2, 4, 1, 3 (center-left, far-right, far-left, center-right) */
@@ -1823,15 +1824,13 @@
 
             .chat-mockup-wrapper {
                 perspective: none;
+                margin: 0 16px;
             }
 
             .chat-mockup,
             .hero .chat-mockup {
-                margin: 0 -24px;
-                border-radius: 0;
-                border-left: none;
-                border-right: none;
                 transform: none;
+                border-radius: 12px;
             }
 
             .chat-mockup:hover,
@@ -1847,7 +1846,31 @@
             }
 
             .chat-messages {
-                min-height: 380px;
+                padding: 16px;
+                gap: 14px;
+                min-height: auto;
+            }
+
+            .chat-bubble {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+
+            .chat-message {
+                max-width: 80%;
+            }
+
+            .chat-message.user {
+                align-self: flex-end;
+            }
+
+            .chat-message.ai {
+                align-self: flex-start;
+            }
+
+            .chat-source {
+                font-size: 0.7rem;
+                padding: 4px 8px;
             }
 
             .theme-toggle {
