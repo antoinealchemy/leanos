@@ -935,74 +935,72 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 0 24px;
-            position: relative;
         }
 
-        .logo-item {
+        .logo-slot {
+            position: relative;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
-            opacity: 0;
-            animation: logoRotate 8s ease-in-out infinite;
         }
 
-        .logo-item img {
+        .logo-slot img {
+            position: absolute;
             height: 50px;
             width: auto;
             max-width: 100%;
             object-fit: contain;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
         }
 
-        /* Position logos 5-8 to overlap with 1-4 */
-        .logo-item:nth-child(5) { grid-column: 1; grid-row: 1; }
-        .logo-item:nth-child(6) { grid-column: 2; grid-row: 1; }
-        .logo-item:nth-child(7) { grid-column: 3; grid-row: 1; }
-        .logo-item:nth-child(8) { grid-column: 4; grid-row: 1; }
-
-        /* First group (1-4) visible 0-50%, second group (5-8) visible 50-100% */
-        .logo-item:nth-child(1), .logo-item:nth-child(2),
-        .logo-item:nth-child(3), .logo-item:nth-child(4) {
-            animation-name: logoGroupA;
+        .logo-slot img.logo-a {
+            animation: logoFadeA 6s ease-in-out infinite;
         }
 
-        .logo-item:nth-child(5), .logo-item:nth-child(6),
-        .logo-item:nth-child(7), .logo-item:nth-child(8) {
-            animation-name: logoGroupB;
+        .logo-slot img.logo-b {
+            animation: logoFadeB 6s ease-in-out infinite;
         }
 
-        @keyframes logoGroupA {
-            0%, 5% { opacity: 0; }
-            10%, 45% { opacity: 0.85; }
+        /* Stagger animations for each position */
+        .logo-slot:nth-child(1) img { animation-delay: 0s; }
+        .logo-slot:nth-child(2) img { animation-delay: 1.5s; }
+        .logo-slot:nth-child(3) img { animation-delay: 3s; }
+        .logo-slot:nth-child(4) img { animation-delay: 4.5s; }
+
+        @keyframes logoFadeA {
+            0%, 8% { opacity: 0; }
+            15%, 42% { opacity: 0.9; }
             50%, 100% { opacity: 0; }
         }
 
-        @keyframes logoGroupB {
-            0%, 50%, 55% { opacity: 0; }
-            60%, 95% { opacity: 0.85; }
+        @keyframes logoFadeB {
+            0%, 50%, 58% { opacity: 0; }
+            65%, 92% { opacity: 0.9; }
             100% { opacity: 0; }
         }
 
         @media (max-width: 768px) {
             .logos-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-                max-width: 400px;
+                gap: 24px;
+                max-width: 350px;
             }
 
-            /* Mobile: 2x2 grid, logos 5-8 overlap with 1-4 */
-            .logo-item:nth-child(1) { grid-column: 1; grid-row: 1; }
-            .logo-item:nth-child(2) { grid-column: 2; grid-row: 1; }
-            .logo-item:nth-child(3) { grid-column: 1; grid-row: 2; }
-            .logo-item:nth-child(4) { grid-column: 2; grid-row: 2; }
-            .logo-item:nth-child(5) { grid-column: 1; grid-row: 1; }
-            .logo-item:nth-child(6) { grid-column: 2; grid-row: 1; }
-            .logo-item:nth-child(7) { grid-column: 1; grid-row: 2; }
-            .logo-item:nth-child(8) { grid-column: 2; grid-row: 2; }
+            .logo-slot {
+                height: 50px;
+            }
 
-            .logo-item img {
+            .logo-slot img {
                 height: 40px;
             }
+
+            /* Adjust stagger for 2x2 grid */
+            .logo-slot:nth-child(1) img { animation-delay: 0s; }
+            .logo-slot:nth-child(2) img { animation-delay: 1.5s; }
+            .logo-slot:nth-child(3) img { animation-delay: 3s; }
+            .logo-slot:nth-child(4) img { animation-delay: 4.5s; }
         }
 
         /* ===== PROBLEM SECTION ===== */
@@ -2012,16 +2010,22 @@
     <section class="proof-bar">
         <p class="proof-text">Trusted by accounting and legal teams across the US</p>
         <div class="logos-grid">
-            <!-- Group 1 (visible first) -->
-            <div class="logo-item"><img src="logos/harrison.png" alt="Harrison & Cole"></div>
-            <div class="logo-item"><img src="logos/SA.png" alt="Sterling & Associates"></div>
-            <div class="logo-item"><img src="logos/blackwell.png" alt="Blackwell Law"></div>
-            <div class="logo-item"><img src="logos/crowford.png" alt="Crawford & Hayes"></div>
-            <!-- Group 2 (visible second) -->
-            <div class="logo-item"><img src="logos/summit.png" alt="Summit Accounting"></div>
-            <div class="logo-item"><img src="logos/meridian.png" alt="Meridian Financial"></div>
-            <div class="logo-item"><img src="logos/atlas.png" alt="Atlas CPA"></div>
-            <div class="logo-item"><img src="logos/pinnacle.png" alt="Pinnacle Tax"></div>
+            <div class="logo-slot">
+                <img src="logos/harrison.png" alt="Harrison & Cole" class="logo-a">
+                <img src="logos/summit.png" alt="Summit Accounting" class="logo-b">
+            </div>
+            <div class="logo-slot">
+                <img src="logos/SA.png" alt="Sterling & Associates" class="logo-a">
+                <img src="logos/meridian.png" alt="Meridian Financial" class="logo-b">
+            </div>
+            <div class="logo-slot">
+                <img src="logos/blackwell.png" alt="Blackwell Law" class="logo-a">
+                <img src="logos/atlas.png" alt="Atlas CPA" class="logo-b">
+            </div>
+            <div class="logo-slot">
+                <img src="logos/crowford.png" alt="Crawford & Hayes" class="logo-a">
+                <img src="logos/pinnacle.png" alt="Pinnacle Tax" class="logo-b">
+            </div>
         </div>
     </section>
 
