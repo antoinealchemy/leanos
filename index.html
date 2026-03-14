@@ -1823,11 +1823,22 @@
                 font-size: 2rem;
             }
 
-            .chat-mockup {
+            .chat-mockup-wrapper {
+                perspective: none;
+            }
+
+            .chat-mockup,
+            .hero .chat-mockup {
                 margin: 0 -24px;
                 border-radius: 0;
                 border-left: none;
                 border-right: none;
+                transform: none;
+            }
+
+            .chat-mockup:hover,
+            .hero .chat-mockup:hover {
+                transform: none;
             }
 
             .theme-toggle {
