@@ -3277,6 +3277,13 @@
                     touchStartY = e.touches[0].clientY;
                 }, { passive: true });
 
+                // Block touchmove when locked
+                document.addEventListener('touchmove', (e) => {
+                    if (isLocked) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
                 // Touch end - detect swipe direction
                 document.addEventListener('touchend', (e) => {
                     if (!isLocked) return;
