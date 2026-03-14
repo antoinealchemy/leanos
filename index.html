@@ -170,6 +170,13 @@
             transform: translateY(0);
         }
 
+        /* Prevent flash on page refresh with hash */
+        .hash-nav .fade-up {
+            opacity: 1;
+            transform: translateY(0);
+            transition: none;
+        }
+
         /* ===== NAVBAR ===== */
         .navbar {
             position: fixed;
@@ -1952,6 +1959,7 @@
     </style>
 </head>
 <body>
+    <script>if(window.location.hash)document.body.classList.add('hash-nav');</script>
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
         <div class="container">
