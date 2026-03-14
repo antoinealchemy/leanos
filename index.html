@@ -408,7 +408,7 @@
         }
 
         [data-theme="light"] .hero-grid {
-            opacity: 0.25;
+            opacity: 0.12;
         }
 
         /* Main Gradient Glow */
@@ -425,7 +425,7 @@
         }
 
         [data-theme="light"] .hero::before {
-            background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.2) 0%, rgba(0, 170, 85, 0.08) 40%, transparent 70%);
+            background: radial-gradient(ellipse at center, rgba(0, 170, 85, 0.1) 0%, rgba(0, 170, 85, 0.04) 40%, transparent 70%);
         }
 
         /* Floating Gradient Orbs */
@@ -464,15 +464,15 @@
         }
 
         [data-theme="light"] .hero-orb-1 {
-            background: radial-gradient(circle, rgba(0, 170, 85, 0.45) 0%, rgba(0, 170, 85, 0.18) 40%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.2) 0%, rgba(0, 170, 85, 0.08) 40%, transparent 70%);
         }
 
         [data-theme="light"] .hero-orb-2 {
-            background: radial-gradient(circle, rgba(0, 170, 85, 0.35) 0%, rgba(0, 170, 85, 0.12) 40%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.15) 0%, rgba(0, 170, 85, 0.05) 40%, transparent 70%);
         }
 
         [data-theme="light"] .hero-orb-3 {
-            background: radial-gradient(circle, rgba(0, 170, 85, 0.3) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(0, 170, 85, 0.12) 0%, transparent 60%);
         }
 
         /* Floating Geometric Shapes */
@@ -490,9 +490,9 @@
         }
 
         [data-theme="light"] .hero-shape {
-            border: 2px solid rgba(0, 170, 85, 0.5);
-            opacity: 0.85;
-            box-shadow: 0 0 25px rgba(0, 170, 85, 0.15);
+            border: 2px solid rgba(0, 170, 85, 0.25);
+            opacity: 0.6;
+            box-shadow: 0 0 15px rgba(0, 170, 85, 0.06);
         }
 
         .hero-shape-1 {
@@ -572,9 +572,9 @@
         }
 
         [data-theme="light"] .hero-line {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(0, 170, 85, 0.7), transparent);
-            box-shadow: 0 0 15px rgba(0, 170, 85, 0.35);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 170, 85, 0.35), transparent);
+            box-shadow: 0 0 8px rgba(0, 170, 85, 0.1);
         }
 
         .hero-line-1 {
@@ -630,9 +630,9 @@
         }
 
         [data-theme="light"] .hero-dot {
-            width: 6px;
-            height: 6px;
-            box-shadow: 0 0 15px var(--accent), 0 0 30px var(--accent);
+            width: 4px;
+            height: 4px;
+            box-shadow: 0 0 6px var(--accent);
         }
 
         .hero-dot-1 { top: 12%; left: 22%; animation-delay: 0s; }
@@ -931,15 +931,13 @@
         }
 
         .logos-grid {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 48px;
-            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 24px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 24px;
             position: relative;
-            overflow: hidden;
         }
 
         .logo-item {
@@ -948,7 +946,7 @@
             justify-content: center;
             padding: 12px;
             opacity: 0;
-            animation: logoRotate 12s ease-in-out infinite;
+            animation: logoRotate 10s ease-in-out infinite;
         }
 
         .logo-item svg {
@@ -964,41 +962,68 @@
             fill: var(--text-secondary);
         }
 
-        /* Staggered animations - 5 visible at a time, rotating */
-        .logo-item:nth-child(1) { animation-delay: 0s; }
-        .logo-item:nth-child(2) { animation-delay: 0.5s; }
-        .logo-item:nth-child(3) { animation-delay: 1s; }
-        .logo-item:nth-child(4) { animation-delay: 1.5s; }
-        .logo-item:nth-child(5) { animation-delay: 2s; }
-        .logo-item:nth-child(6) { animation-delay: 6s; }
-        .logo-item:nth-child(7) { animation-delay: 6.5s; }
-        .logo-item:nth-child(8) { animation-delay: 7s; }
-        .logo-item:nth-child(9) { animation-delay: 7.5s; }
-        .logo-item:nth-child(10) { animation-delay: 8s; }
+        /* Position logos 6-10 to overlap with 1-5 */
+        .logo-item:nth-child(6) { grid-column: 1; grid-row: 1; }
+        .logo-item:nth-child(7) { grid-column: 2; grid-row: 1; }
+        .logo-item:nth-child(8) { grid-column: 3; grid-row: 1; }
+        .logo-item:nth-child(9) { grid-column: 4; grid-row: 1; }
+        .logo-item:nth-child(10) { grid-column: 5; grid-row: 1; }
 
-        @keyframes logoRotate {
-            0%, 8% { opacity: 0; transform: translateY(10px); }
-            12%, 42% { opacity: 0.85; transform: translateY(0); }
-            46%, 100% { opacity: 0; transform: translateY(-10px); }
+        /* First group visible 0-50%, second group visible 50-100% */
+        .logo-item:nth-child(1), .logo-item:nth-child(2), .logo-item:nth-child(3),
+        .logo-item:nth-child(4), .logo-item:nth-child(5) {
+            animation-name: logoGroupA;
+        }
+
+        .logo-item:nth-child(6), .logo-item:nth-child(7), .logo-item:nth-child(8),
+        .logo-item:nth-child(9), .logo-item:nth-child(10) {
+            animation-name: logoGroupB;
+        }
+
+        /* Stagger within each group */
+        .logo-item:nth-child(1), .logo-item:nth-child(6) { animation-delay: 0s; }
+        .logo-item:nth-child(2), .logo-item:nth-child(7) { animation-delay: 0.15s; }
+        .logo-item:nth-child(3), .logo-item:nth-child(8) { animation-delay: 0.3s; }
+        .logo-item:nth-child(4), .logo-item:nth-child(9) { animation-delay: 0.45s; }
+        .logo-item:nth-child(5), .logo-item:nth-child(10) { animation-delay: 0.6s; }
+
+        @keyframes logoGroupA {
+            0%, 5% { opacity: 0; }
+            10%, 45% { opacity: 0.7; }
+            50%, 100% { opacity: 0; }
+        }
+
+        @keyframes logoGroupB {
+            0%, 50%, 55% { opacity: 0; }
+            60%, 95% { opacity: 0.7; }
+            100% { opacity: 0; }
         }
 
         @media (max-width: 900px) {
             .logos-grid {
-                gap: 32px;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
             }
-            .logo-item:nth-child(n+6) {
+            .logo-item:nth-child(4), .logo-item:nth-child(5),
+            .logo-item:nth-child(9), .logo-item:nth-child(10) {
                 display: none;
             }
+            .logo-item:nth-child(6) { grid-column: 1; }
+            .logo-item:nth-child(7) { grid-column: 2; }
+            .logo-item:nth-child(8) { grid-column: 3; }
         }
 
         @media (max-width: 600px) {
             .logos-grid {
-                gap: 20px;
-                flex-wrap: wrap;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
-            .logo-item:nth-child(n+5) {
+            .logo-item:nth-child(3), .logo-item:nth-child(4), .logo-item:nth-child(5),
+            .logo-item:nth-child(8), .logo-item:nth-child(9), .logo-item:nth-child(10) {
                 display: none;
             }
+            .logo-item:nth-child(6) { grid-column: 1; }
+            .logo-item:nth-child(7) { grid-column: 2; }
             .logo-item svg {
                 height: 30px;
             }
