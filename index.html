@@ -855,13 +855,13 @@
 
         .proof-text {
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
             margin-bottom: 32px;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-family: 'Instrument Serif', Georgia, serif;
-            font-weight: 700;
+            letter-spacing: 0.15em;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
         }
 
         .marquee {
@@ -878,10 +878,30 @@
         }
 
         .marquee-item {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
             white-space: nowrap;
-            opacity: 0.6;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .marquee-item:hover {
+            opacity: 0.8;
+        }
+
+        .marquee-item svg {
+            height: 32px;
+            width: auto;
+            fill: var(--text-secondary);
+        }
+
+        .marquee-item .logo-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: -0.01em;
         }
 
         /* ===== PROBLEM SECTION ===== */
@@ -1839,28 +1859,188 @@
         <p class="proof-text">Trusted by accounting and legal teams across the US</p>
         <div class="marquee">
             <div class="marquee-content">
-                <span class="marquee-item">Harrison & Cole CPA</span>
-                <span class="marquee-item">Meridian Legal Group</span>
-                <span class="marquee-item">Summit Accounting Partners</span>
-                <span class="marquee-item">Blackwell Law Firm</span>
-                <span class="marquee-item">Atlas CPA Associates</span>
-                <span class="marquee-item">Vantage Legal</span>
-                <span class="marquee-item">Pinnacle Tax Advisors</span>
-                <span class="marquee-item">Sterling & Associates</span>
-                <span class="marquee-item">Cornerstone Law Partners</span>
-                <span class="marquee-item">Apex Financial Group</span>
+                <!-- Harrison & Cole CPA - Classic columns icon -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 40 32" fill="currentColor">
+                        <rect x="2" y="28" width="36" height="3" rx="1"/>
+                        <rect x="2" y="2" width="36" height="4" rx="1"/>
+                        <rect x="6" y="8" width="4" height="18"/>
+                        <rect x="18" y="8" width="4" height="18"/>
+                        <rect x="30" y="8" width="4" height="18"/>
+                    </svg>
+                    <span class="logo-text">Harrison & Cole</span>
+                </div>
+                <!-- Meridian Legal Group - Balance scale -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 36 32" fill="currentColor">
+                        <rect x="16" y="4" width="4" height="24"/>
+                        <rect x="8" y="28" width="20" height="3" rx="1"/>
+                        <circle cx="18" cy="4" r="3"/>
+                        <path d="M4 12 L18 8 L32 12 L30 14 L18 10 L6 14 Z"/>
+                        <path d="M2 12 C2 16 6 18 8 18 L0 18 C2 18 2 16 2 12"/>
+                        <path d="M34 12 C34 16 30 18 28 18 L36 18 C34 18 34 16 34 12"/>
+                    </svg>
+                    <span class="logo-text">Meridian Legal</span>
+                </div>
+                <!-- Summit Accounting - Mountain peak -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 40 32" fill="currentColor">
+                        <path d="M20 2 L36 28 L4 28 Z"/>
+                        <path d="M20 8 L30 28 L10 28 Z" fill="var(--bg-primary)"/>
+                        <path d="M20 14 L26 28 L14 28 Z"/>
+                    </svg>
+                    <span class="logo-text">Summit Accounting</span>
+                </div>
+                <!-- Blackwell Law - Shield -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 36" fill="currentColor">
+                        <path d="M16 2 L30 8 L30 18 C30 26 22 32 16 34 C10 32 2 26 2 18 L2 8 Z"/>
+                        <path d="M16 6 L26 10 L26 18 C26 24 20 28 16 30 C12 28 6 24 6 18 L6 10 Z" fill="var(--bg-primary)"/>
+                        <rect x="14" y="12" width="4" height="12"/>
+                        <rect x="10" y="16" width="12" height="4"/>
+                    </svg>
+                    <span class="logo-text">Blackwell Law</span>
+                </div>
+                <!-- Atlas CPA - Globe/Atlas -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <ellipse cx="16" cy="16" rx="6" ry="14" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="2" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="2"/>
+                        <line x1="16" y1="2" x2="16" y2="30" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span class="logo-text">Atlas CPA</span>
+                </div>
+                <!-- Vantage Legal - Arrow up -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <path d="M16 2 L28 18 L20 18 L20 30 L12 30 L12 18 L4 18 Z"/>
+                    </svg>
+                    <span class="logo-text">Vantage Legal</span>
+                </div>
+                <!-- Pinnacle Tax - Triangle peak -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 36 32" fill="currentColor">
+                        <path d="M18 2 L34 30 L2 30 Z"/>
+                        <path d="M18 10 L28 30 L8 30 Z" fill="var(--bg-primary)"/>
+                    </svg>
+                    <span class="logo-text">Pinnacle Tax</span>
+                </div>
+                <!-- Sterling & Associates - Star -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <path d="M16 2 L19 12 L30 12 L21 19 L24 30 L16 23 L8 30 L11 19 L2 12 L13 12 Z"/>
+                    </svg>
+                    <span class="logo-text">Sterling & Associates</span>
+                </div>
+                <!-- Cornerstone Law - Building block -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <rect x="2" y="18" width="12" height="12" rx="1"/>
+                        <rect x="18" y="18" width="12" height="12" rx="1"/>
+                        <rect x="10" y="6" width="12" height="12" rx="1"/>
+                    </svg>
+                    <span class="logo-text">Cornerstone Law</span>
+                </div>
+                <!-- Apex Financial - A letterform -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <path d="M16 2 L30 30 L24 30 L20 22 L12 22 L8 30 L2 30 Z M16 10 L13 18 L19 18 Z"/>
+                    </svg>
+                    <span class="logo-text">Apex Financial</span>
+                </div>
             </div>
             <div class="marquee-content" aria-hidden="true">
-                <span class="marquee-item">Harrison & Cole CPA</span>
-                <span class="marquee-item">Meridian Legal Group</span>
-                <span class="marquee-item">Summit Accounting Partners</span>
-                <span class="marquee-item">Blackwell Law Firm</span>
-                <span class="marquee-item">Atlas CPA Associates</span>
-                <span class="marquee-item">Vantage Legal</span>
-                <span class="marquee-item">Pinnacle Tax Advisors</span>
-                <span class="marquee-item">Sterling & Associates</span>
-                <span class="marquee-item">Cornerstone Law Partners</span>
-                <span class="marquee-item">Apex Financial Group</span>
+                <!-- Harrison & Cole CPA -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 40 32" fill="currentColor">
+                        <rect x="2" y="28" width="36" height="3" rx="1"/>
+                        <rect x="2" y="2" width="36" height="4" rx="1"/>
+                        <rect x="6" y="8" width="4" height="18"/>
+                        <rect x="18" y="8" width="4" height="18"/>
+                        <rect x="30" y="8" width="4" height="18"/>
+                    </svg>
+                    <span class="logo-text">Harrison & Cole</span>
+                </div>
+                <!-- Meridian Legal Group -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 36 32" fill="currentColor">
+                        <rect x="16" y="4" width="4" height="24"/>
+                        <rect x="8" y="28" width="20" height="3" rx="1"/>
+                        <circle cx="18" cy="4" r="3"/>
+                        <path d="M4 12 L18 8 L32 12 L30 14 L18 10 L6 14 Z"/>
+                        <path d="M2 12 C2 16 6 18 8 18 L0 18 C2 18 2 16 2 12"/>
+                        <path d="M34 12 C34 16 30 18 28 18 L36 18 C34 18 34 16 34 12"/>
+                    </svg>
+                    <span class="logo-text">Meridian Legal</span>
+                </div>
+                <!-- Summit Accounting -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 40 32" fill="currentColor">
+                        <path d="M20 2 L36 28 L4 28 Z"/>
+                        <path d="M20 8 L30 28 L10 28 Z" fill="var(--bg-primary)"/>
+                        <path d="M20 14 L26 28 L14 28 Z"/>
+                    </svg>
+                    <span class="logo-text">Summit Accounting</span>
+                </div>
+                <!-- Blackwell Law -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 36" fill="currentColor">
+                        <path d="M16 2 L30 8 L30 18 C30 26 22 32 16 34 C10 32 2 26 2 18 L2 8 Z"/>
+                        <path d="M16 6 L26 10 L26 18 C26 24 20 28 16 30 C12 28 6 24 6 18 L6 10 Z" fill="var(--bg-primary)"/>
+                        <rect x="14" y="12" width="4" height="12"/>
+                        <rect x="10" y="16" width="12" height="4"/>
+                    </svg>
+                    <span class="logo-text">Blackwell Law</span>
+                </div>
+                <!-- Atlas CPA -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <ellipse cx="16" cy="16" rx="6" ry="14" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="2" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="2"/>
+                        <line x1="16" y1="2" x2="16" y2="30" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span class="logo-text">Atlas CPA</span>
+                </div>
+                <!-- Vantage Legal -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <path d="M16 2 L28 18 L20 18 L20 30 L12 30 L12 18 L4 18 Z"/>
+                    </svg>
+                    <span class="logo-text">Vantage Legal</span>
+                </div>
+                <!-- Pinnacle Tax -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 36 32" fill="currentColor">
+                        <path d="M18 2 L34 30 L2 30 Z"/>
+                        <path d="M18 10 L28 30 L8 30 Z" fill="var(--bg-primary)"/>
+                    </svg>
+                    <span class="logo-text">Pinnacle Tax</span>
+                </div>
+                <!-- Sterling & Associates -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <path d="M16 2 L19 12 L30 12 L21 19 L24 30 L16 23 L8 30 L11 19 L2 12 L13 12 Z"/>
+                    </svg>
+                    <span class="logo-text">Sterling & Associates</span>
+                </div>
+                <!-- Cornerstone Law -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <rect x="2" y="18" width="12" height="12" rx="1"/>
+                        <rect x="18" y="18" width="12" height="12" rx="1"/>
+                        <rect x="10" y="6" width="12" height="12" rx="1"/>
+                    </svg>
+                    <span class="logo-text">Cornerstone Law</span>
+                </div>
+                <!-- Apex Financial -->
+                <div class="marquee-item">
+                    <svg viewBox="0 0 32 32" fill="currentColor">
+                        <path d="M16 2 L30 30 L24 30 L20 22 L12 22 L8 30 L2 30 Z M16 10 L13 18 L19 18 Z"/>
+                    </svg>
+                    <span class="logo-text">Apex Financial</span>
+                </div>
             </div>
         </div>
     </section>
