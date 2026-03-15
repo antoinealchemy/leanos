@@ -1923,10 +1923,27 @@
             width: auto;
         }
 
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            max-width: 400px;
+        }
+
+        .footer-tagline strong {
+            color: var(--text-primary);
+        }
+
         .footer-main {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             padding-bottom: 24px;
             border-bottom: 1px solid var(--border);
         }
@@ -2890,9 +2907,12 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-main">
-                <div class="footer-logo">
-                    <img src="logo-white.png" alt="Leanos" class="logo-dark">
-                    <img src="logo-black.png" alt="Leanos" class="logo-light">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="logo-white.png" alt="Leanos" class="logo-dark">
+                        <img src="logo-black.png" alt="Leanos" class="logo-light">
+                    </div>
+                    <p class="footer-tagline"><strong>Lean</strong> = do more with less. <strong>OS</strong> = your business operating system.<br>The central system that runs everything. Simple, automated, efficient.</p>
                 </div>
                 <ul class="footer-links">
                     <li><a href="#how-it-works">How it works</a></li>
