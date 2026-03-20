@@ -2180,25 +2180,31 @@
             }
 
             .footer-main {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 24px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 24px 16px;
+            }
+
+            .footer-logo {
+                grid-column: 1 / -1;
             }
 
             .footer-why {
                 text-align: left;
+                grid-column: 1;
             }
 
             .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 16px;
-                width: 100%;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 12px;
+                grid-column: 2;
             }
 
             .footer-socials {
                 justify-content: center;
-                width: 100%;
+                grid-column: 1 / -1;
             }
 
             .footer-bottom {
@@ -2557,7 +2563,7 @@
                     <div class="solution-step fade-up">
                         <div class="step-number">1.</div>
                         <div class="step-content">
-                            <h3>We collect & index your documents</h3>
+                            <h3>You upload, we index your documents</h3>
                             <p>PDFs, Word docs, emails, contracts, procedures, everything. Our AI expert organizes and indexes your entire knowledge base in a private, secure environment.</p>
                         </div>
                     </div>
