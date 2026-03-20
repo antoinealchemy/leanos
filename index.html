@@ -1216,16 +1216,20 @@
             .logo-slot:nth-child(4) img { animation-delay: 12s; }
 
             .video-proof .logos-grid {
-                gap: 24px;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px 16px;
+                max-width: 280px;
+                margin: 0 auto;
             }
 
             .video-proof .logo-slot {
-                height: 35px;
-                width: 70px;
+                height: 45px;
+                width: auto;
             }
 
             .video-proof .logo-slot img {
-                height: 28px;
+                height: 35px;
             }
 
             /* Reduce section padding on mobile */
