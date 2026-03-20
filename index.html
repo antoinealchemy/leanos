@@ -1318,6 +1318,25 @@
             height: 75px;
             width: auto;
             max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .video-proof .logos-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px 16px;
+                max-width: 280px;
+                margin: 0 auto;
+            }
+
+            .video-proof .logo-slot {
+                height: 45px;
+                width: auto;
+            }
+
+            .video-proof .logo-slot img {
+                height: 35px;
+            }
             object-fit: contain;
         }
 
