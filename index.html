@@ -1213,8 +1213,16 @@
             .logo-slot:nth-child(1) img { animation-delay: 8s; }
             .logo-slot:nth-child(4) img { animation-delay: 12s; }
 
+            .video-proof .logos-grid {
+                gap: 24px;
+            }
+
+            .video-proof .logo-slot {
+                height: 40px;
+            }
+
             /* Reduce section padding on mobile */
-            .problem, .solution, .features, .roi, .testimonials, .pricing, .team, .faq, .final-cta {
+            .video-demo, .problem, .solution, .features, .roi, .testimonials, .pricing, .team, .faq, .final-cta {
                 padding: 40px 0;
             }
 
@@ -1262,6 +1270,48 @@
 
         [data-theme="light"] .video-wrapper {
             box-shadow: 0 25px 80px -20px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-proof {
+            margin-top: 64px;
+            text-align: center;
+        }
+
+        .video-proof .proof-text {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .video-proof .logos-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .video-proof .logo-slot {
+            position: relative;
+            height: 50px;
+        }
+
+        .video-proof .logo-slot img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-proof .logo-slot img:hover {
+            opacity: 1;
+        }
+
+        .video-proof .logo-slot .logo-b {
+            display: none;
         }
 
         /* ===== PROBLEM SECTION ===== */
@@ -2531,29 +2581,6 @@
         </div>
     </section>
 
-    <!-- PROOF BAR -->
-    <section class="proof-bar">
-        <p class="proof-text">Trusted by accounting and<br class="mobile-break"> legal teams across the US</p>
-        <div class="logos-grid">
-            <div class="logo-slot">
-                <img src="logos/harrison.png" alt="Harrison & Cole" class="logo-a">
-                <img src="logos/summit.png" alt="Summit Accounting" class="logo-b">
-            </div>
-            <div class="logo-slot">
-                <img src="logos/SA.png" alt="Sterling & Associates" class="logo-a">
-                <img src="logos/meridian.png" alt="Meridian Financial" class="logo-b">
-            </div>
-            <div class="logo-slot">
-                <img src="logos/blackwell.png" alt="Blackwell Law" class="logo-a">
-                <img src="logos/atlas.png" alt="Atlas CPA" class="logo-b">
-            </div>
-            <div class="logo-slot">
-                <img src="logos/crowford.png" alt="Crawford & Hayes" class="logo-a">
-                <img src="logos/pinnacle.png" alt="Pinnacle Tax" class="logo-b">
-            </div>
-        </div>
-    </section>
-
     <!-- VIDEO DEMO -->
     <section class="video-demo" id="watch-demo">
         <div class="container">
@@ -2569,6 +2596,27 @@
                     s.async=!0;
                     document.head.appendChild(s);
                 </script>
+            </div>
+            <div class="video-proof fade-up">
+                <p class="proof-text">Trusted by accounting and<br class="mobile-break"> legal teams across the US</p>
+                <div class="logos-grid">
+                    <div class="logo-slot">
+                        <img src="logos/harrison.png" alt="Harrison & Cole" class="logo-a">
+                        <img src="logos/summit.png" alt="Summit Accounting" class="logo-b">
+                    </div>
+                    <div class="logo-slot">
+                        <img src="logos/SA.png" alt="Sterling & Associates" class="logo-a">
+                        <img src="logos/meridian.png" alt="Meridian Financial" class="logo-b">
+                    </div>
+                    <div class="logo-slot">
+                        <img src="logos/blackwell.png" alt="Blackwell Law" class="logo-a">
+                        <img src="logos/atlas.png" alt="Atlas CPA" class="logo-b">
+                    </div>
+                    <div class="logo-slot">
+                        <img src="logos/crowford.png" alt="Crawford & Hayes" class="logo-a">
+                        <img src="logos/pinnacle.png" alt="Pinnacle Tax" class="logo-b">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
